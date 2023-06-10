@@ -61,4 +61,4 @@ platformBrowserDynamic().bootstrapModule(AppModule).then(platformRef => {
 });
 
 // Show ui-router-visualizer
-appjs.run(['$uiRouter', ($uiRouter) => visualizer($uiRouter) ]); //['$uiRouter', ($uiRouter) => visualizer($uiRouter) ]
+appjs.run(() => {}); //['$uiRouter', ($uiRouter) => visualizer($uiRouter) ]

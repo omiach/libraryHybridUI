@@ -23,7 +23,7 @@ const otherwiseConfigBlock = ['$urlRouterProvider', '$locationProvider', ($urlRo
     requireBase: false
   });
   $locationProvider.hashPrefix('');
-  //$urlRouterProvider.otherwise("/welcome");
+  $urlRouterProvider.otherwise("/");
 }];
 appjs.config(otherwiseConfigBlock);
 
