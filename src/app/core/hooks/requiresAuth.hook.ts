@@ -1,5 +1,3 @@
-import { mainModule } from '../main.module';
-
 authHookRunBlock.$inject = ['$transitions', 'authService'];
 export function authHookRunBlock($transitions, authService) {
 
@@ -8,7 +6,6 @@ export function authHookRunBlock($transitions, authService) {
   };
 
   let redirectToLogin = (transition) => {
-    //let authService = transition.injector().get('authService');
     let $state = transition.router.stateService;
     if (!authService.isAuthenticated()) {
       return $state.target('login', undefined, { location: false });
@@ -17,5 +14,3 @@ export function authHookRunBlock($transitions, authService) {
 
   $transitions.onBefore(requiresAuthCriteria, redirectToLogin, {priority: 10});
 }
-
-//mainModule.run(authHookRunBlock);

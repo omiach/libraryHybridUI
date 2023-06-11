@@ -4,4 +4,5 @@ import "./main.state";
 import "./app.component";
 import "./shell/shell.state";
 import "./shell/shell.component";
-//import "../modules/auth"
+import "../modules/auth";
+import "../shared/shared.module";
