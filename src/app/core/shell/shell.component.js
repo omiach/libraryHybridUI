@@ -24,7 +24,7 @@ const shellComponent = {
     template:
     `
     <h1 class="text-3xl font-bold underline">
-    Hello world!
+    <p>SHELL</p>
     </h1>
     <ui-view></ui-view>
     `

@@ -1,2 +1,7 @@
 import * as angular from 'angular';
-export const mainModule = angular.module('main', ['ui.router']);
+import { authModule } from '../modules/auth/auth.module';
+
+export const mainModule = angular.module('main', [
+    'ui.router',
+    authModule.name
+]);

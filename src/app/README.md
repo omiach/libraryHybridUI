@@ -1,1 +1,0 @@
-Apriorit self-education
