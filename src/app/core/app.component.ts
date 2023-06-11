@@ -8,7 +8,6 @@ const appComponent = {
     controller: AppController,
     template:
     `
-    <p>APP</p>
     <ui-view></ui-view>
     `
   };

@@ -4,7 +4,10 @@ const mainState = {
     parent: 'app',
     name: 'shell',
     url:"/",
-    component: 'shell'
+    component: 'shell',
+    data: {
+      requiresAuth:true
+    }
   };
   
 mainModule.config(['$stateProvider', ($stateProvider) => {

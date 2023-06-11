@@ -1,2 +1,6 @@
 import * as angular from 'angular';
-export const authModule = angular.module('auth', []);
+import { AuthService } from './services/auth.service';
+
+export const authModule = angular
+.module('auth', [])
+.service('authService',AuthService);
