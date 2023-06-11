@@ -1,11 +1,11 @@
 import * as angular from 'angular';
 import { authModule } from '../modules/auth/auth.module';
-import { AuthService } from '../modules/auth/services/auth.service'
-import { authHookRunBlock } from './hooks/requiresAuth.hook'
+import { authHookRunBlock } from './hooks/requiresAuth.hook';
+import { sharedModule } from '../shared/shared.module';
 
 export const mainModule = angular.module('main', [
     'ui.router',
-    authModule.name
+    authModule.name,
+    sharedModule.name
 ])
-//.service('authService',AuthService)
 .run(authHookRunBlock);
