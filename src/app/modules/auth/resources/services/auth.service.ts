@@ -3,7 +3,7 @@ import { AuthResult } from "../models/authResult";
 import { AuthRequest } from "../models/authRequest";
 
 
-export class AuthService  {
+export class AuthService implements AuthInterface  {
     static $inject = ['authConstants'];
     authConstants:authConstantsInterface;
     mockUsers:AuthRequest[];
@@ -17,7 +17,7 @@ export class AuthService  {
         return !!localStorage.getItem(this.authConstants.ACCES_TOKEN_KEY) && !!localStorage.getItem(this.authConstants.REFRESH_TOKEN_KEY);
     }
 
-    logIn(loginResult:AuthResult){
+    setTokens(loginResult:AuthResult){
         localStorage.setItem(this.authConstants.ACCES_TOKEN_KEY, loginResult.token);
         localStorage.setItem(this.authConstants.REFRESH_TOKEN_KEY, loginResult.refreshToken);
     }
@@ -27,9 +27,9 @@ export class AuthService  {
         localStorage.removeItem(this.authConstants.REFRESH_TOKEN_KEY);
     }
 
-    authenticate(authRequest:AuthRequest){
+    logIn(authRequest:AuthRequest){
         if(this.mockUsers.find(x => x.name === authRequest.name && x.password === authRequest.password)){
-            this.logIn({token:'token', refreshToken:'refreshToken',succeeded:true,twoFactorCodeRequired:false,errors:[]});
+            this.setTokens({token:'token', refreshToken:'refreshToken',succeeded:true,twoFactorCodeRequired:false,errors:[]});
         }
         else{
             this.logOut();
@@ -46,4 +46,10 @@ export class AuthService  {
         ];
     }
 
+}
+
+export interface AuthInterface{
+    isAuthenticated();
+    logOut();
+    logIn(authRequest:AuthRequest);
 }
