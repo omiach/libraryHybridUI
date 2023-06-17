@@ -1,11 +1,13 @@
 import { mainModule } from '../../../core/main.module';
 import { AuthRequest } from '../resources/models/authRequest';
 import { AuthInterface } from '../resources/services/auth.service';
+import { Store } from '@ngrx/store';
 
 
 class LoginController {
-    static $inject = ['authService'];
+    static $inject = ['authService, storeService'];
     authService:AuthInterface;
+    storeService:Store;
     formData:AuthRequest = {
       name:'',
       password:''
@@ -19,6 +21,7 @@ class LoginController {
     };
 
     submitForm(){
+      //this.storeService.dispatch();
       this.authService.logIn(this.formData)
     }
 }

@@ -5,42 +5,35 @@ import { BrowserModule } from '@angular/platform-browser';
 import { UIRouterUpgradeModule } from '@uirouter/angular-hybrid';
 import { UIRouterModule } from '@uirouter/angular';
 import { appjs } from './app.angularjs.module';
+import { StoreModule } from '@ngrx/store';
+import { metaReducers, reducers } from './store';
+import { EffectsModule } from '@ngrx/effects';
 
-/* import { PrefsModule } from './prefs/prefs.module'; */
-
-// Create a "future state" (a placeholder) for the Contacts
-// Angular module which will be lazy loaded by UI-Router
-
-/* export const contactsFutureState = {
-  name: 'contacts.**',
-  url: '/contacts',
-  loadChildren: () => import('./contacts/contacts.module').then(m => m.ContactsModule),
-}; */
-
-/* export function getDialogService($injector) {
-  return $injector.get('DialogService');
-}
-
-export function getContactsService($injector) {
-  return $injector.get('Contacts');
-} */
-
-// The main NgModule for the Angular portion of the hybrid app
 @NgModule({
   imports: [
     BrowserModule,
-    // Provide angular upgrade capabilities
+
     UpgradeModule,
     UIRouterUpgradeModule,
 
     //UIRouterModule.forChild({ states: [contactsFutureState] }),
-
-    //PrefsModule,
+    StoreModule.forRoot(reducers, {
+      metaReducers,
+      runtimeChecks: {
+        strictStateSerializability: true,
+        strictActionSerializability: true,
+        strictActionWithinNgZone: true,
+        strictActionTypeUniqueness: true,
+        strictStateImmutability: false,
+        strictActionImmutability: false,
+      },
+    }),
+    EffectsModule.forRoot([
+    //  SpinnerEffects,
+    //  AlertEffects,
+    ]),
   ],
   providers: [
-    // Register some AngularJS services as Angular providers
-    //{ provide: 'DialogService', deps: ['$injector'], useFactory: getDialogService },
-    //{ provide: 'Contacts', deps: ['$injector'], useFactory: getContactsService },
   ]
 })
 export class AppModule {

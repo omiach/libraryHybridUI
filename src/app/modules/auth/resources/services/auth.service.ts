@@ -1,6 +1,7 @@
 import { authConstantsInterface } from "../../../../shared/constants/constants";
 import { AuthResult } from "../models/authResult";
 import { AuthRequest } from "../models/authRequest";
+import { Observable, of } from "rxjs";
 
 
 export class AuthService implements AuthInterface  {
@@ -27,12 +28,18 @@ export class AuthService implements AuthInterface  {
         localStorage.removeItem(this.authConstants.REFRESH_TOKEN_KEY);
     }
 
-    logIn(authRequest:AuthRequest){
-        if(this.mockUsers.find(x => x.name === authRequest.name && x.password === authRequest.password)){
+    logIn(authRequest:AuthRequest):Observable<AuthResult>{
+/*         if(this.mockUsers.find(x => x.name === authRequest.name && x.password === authRequest.password)){
             this.setTokens({token:'token', refreshToken:'refreshToken',succeeded:true,twoFactorCodeRequired:false,errors:[]});
         }
         else{
             this.logOut();
+        } */
+        if(this.mockUsers.find(x => x.name === authRequest.name && x.password === authRequest.password)){
+            return of({token:'token', refreshToken:'refreshToken',succeeded:true,errors:[]});
+        } 
+        else{
+            return of({token:'', refreshToken:'',succeeded:false,errors:['Mock error']});                
         }
     }
 
