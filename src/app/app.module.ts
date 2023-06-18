@@ -7,7 +7,7 @@ import { UIRouterModule } from '@uirouter/angular';
 import { appjs } from './app.angularjs.module';
 import { StoreModule } from '@ngrx/store';
 import { metaReducers, reducers } from './store';
-import { EffectsModule } from '@ngrx/effects';
+
 
 @NgModule({
   imports: [
@@ -28,10 +28,6 @@ import { EffectsModule } from '@ngrx/effects';
         strictActionImmutability: false,
       },
     }),
-    EffectsModule.forRoot([
-    //  SpinnerEffects,
-    //  AlertEffects,
-    ]),
   ],
   providers: [
   ]

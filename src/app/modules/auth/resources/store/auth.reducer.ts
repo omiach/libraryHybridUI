@@ -58,4 +58,12 @@ export const reducer = createReducer(
           isLoggedIn: false
         };
       }),
+      on(fromAuthActions.clearCurrentUserInfo, (state, action) => {
+        return {
+          ...state,
+          user: null,
+          error: null,
+          isLoggedIn: false
+        };
+      }),
 );

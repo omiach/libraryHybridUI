@@ -4,9 +4,7 @@ import { of } from 'rxjs';
 import {
   catchError,
   concatMap,
-  exhaustMap,
   map,
-  tap,
 } from 'rxjs/operators';
 
 import * as AuthActions from './auth.actions';
@@ -19,8 +17,8 @@ export class AuthEffects {
   login$ = createEffect(() => {
     return this.actions$.pipe(
       ofType(AuthActions.login),
-      concatMap((action) =>
-        this.authService.logIn(action.authRequest).pipe(
+      concatMap((action) => 
+          this.authService.logIn(action.authRequest).pipe(
           map((authResult) => {
             if (authResult.succeeded){
               this.authService.setTokens(authResult);
@@ -33,7 +31,7 @@ export class AuthEffects {
             return of(AuthActions.loginFailure({ error: error?.error?.errors  ?? {}}))
           })
         )
-      )
+        )
     );
   });
 

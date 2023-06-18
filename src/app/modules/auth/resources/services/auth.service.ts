@@ -66,6 +66,7 @@ export class AuthService implements AuthInterface  {
 export interface AuthInterface{
     isAuthenticated();
     logOut();
-    logIn(authRequest:AuthRequest);
+    logIn(authRequest:AuthRequest):Observable<AuthResult>;
+    setTokens(loginResult:AuthResult);
     getCurrentUserInfo():Observable<User>;
 }

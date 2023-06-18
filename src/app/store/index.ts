@@ -1,5 +1,6 @@
 import { ActionReducer, ActionReducerMap, MetaReducer } from '@ngrx/store';
-  import { environment } from '../../environments/environment';
+import { environment } from '../../environments/environment';
+import * as fromAuth from '../modules/auth/resources/store/auth.reducer'
  /* import * as fromAuth from './reducers/auth.reducer';
    import * as fromCompanyAccount from './reducers/company-account.reducer';
   import * as fromSpinner from './reducers/spinner.reducer';
@@ -11,6 +12,7 @@ import { ActionReducer, ActionReducerMap, MetaReducer } from '@ngrx/store';
   import * as fromCompanyVerification from './reducers/company-verification.reducers' */
   export interface AppState {
     //router: fromRouter.RouterReducerState;
+    [fromAuth.authFeatureKey]:fromAuth.State;
 /*     [fromAuth.authFeatureKey]: fromAuth.State;
     [fromSpinner.spinnerFeatureKey]: fromSpinner.State;
     [fromCurrentInvoices.invoicesFeatureKey]: fromCurrentInvoices.State;
@@ -21,8 +23,9 @@ import { ActionReducer, ActionReducerMap, MetaReducer } from '@ngrx/store';
     [fromCompanyVerification.companyVerificationFeatureKey]:fromCompanyVerification.State; */
   }
 
-export const routerKey = "router";
-  export const reducers: ActionReducerMap<AppState> = {
+//export const routerKey = "router";
+export const reducers: ActionReducerMap<AppState> = {
+  [fromAuth.authFeatureKey]:fromAuth.reducer
 /*     [fromAuth.authFeatureKey]: fromAuth.reducer,
     [fromSpinner.spinnerFeatureKey]: fromSpinner.reducer,
     [fromCurrentInvoices.invoicesFeatureKey]:fromCurrentInvoices.reducer,
