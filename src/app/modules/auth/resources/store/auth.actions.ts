@@ -35,3 +35,7 @@ export const getCurrentUserInfoFailure = createAction(
   '[Auth Effect] Get current user info Failure',
   props<{ error: any }>()
 );
+
+export const clearCurrentUserInfo = createAction(
+  '[Auth Effect] Clear current user info'
+);

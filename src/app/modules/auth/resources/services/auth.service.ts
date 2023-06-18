@@ -2,6 +2,7 @@ import { authConstantsInterface } from "../../../../shared/constants/constants";
 import { AuthResult } from "../models/authResult";
 import { AuthRequest } from "../models/authRequest";
 import { Observable, of } from "rxjs";
+import { User } from "../models/user";
 
 
 export class AuthService implements AuthInterface  {
@@ -36,11 +37,17 @@ export class AuthService implements AuthInterface  {
             this.logOut();
         } */
         if(this.mockUsers.find(x => x.name === authRequest.name && x.password === authRequest.password)){
-            return of({token:'token', refreshToken:'refreshToken',succeeded:true,errors:[]});
+            return of({token:authRequest.name, refreshToken:authRequest.name + '_refreshToken',succeeded:true,errors:[]});
         } 
         else{
             return of({token:'', refreshToken:'',succeeded:false,errors:['Mock error']});                
         }
+    }
+
+    getCurrentUserInfo():Observable<User>{
+        const users = JSON.parse(localStorage.getItem('mockUsers')) as User[];
+        const token = localStorage.getItem(this.authConstants.ACCES_TOKEN_KEY);
+        return of(users.find(x => x.name === token))
     }
 
     generateMockUsers(){
@@ -51,6 +58,7 @@ export class AuthService implements AuthInterface  {
             {name:'user3',password:'user3'},
             {name:'user4',password:'user4'},
         ];
+        localStorage.setItem('mockUsers', JSON.stringify(this.mockUsers));
     }
 
 }
@@ -59,4 +67,5 @@ export interface AuthInterface{
     isAuthenticated();
     logOut();
     logIn(authRequest:AuthRequest);
+    getCurrentUserInfo():Observable<User>;
 }

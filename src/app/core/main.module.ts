@@ -1,4 +1,5 @@
 import * as angular from 'angular';
+import { asyncFilterModule } from './filters/async/'
 import { authModule } from '../modules/auth/auth.module';
 import { authHookRunBlock } from './hooks/requiresAuth.hook';
 import { sharedModule } from '../shared/shared.module';
@@ -8,7 +9,8 @@ import { Store } from '@ngrx/store';
 export const mainModule = angular.module('main', [
     'ui.router',
     authModule.name,
-    sharedModule.name
+    sharedModule.name,
+    asyncFilterModule
 ])
 .factory('storeService',downgradeInjectable(Store))
 .run(authHookRunBlock);

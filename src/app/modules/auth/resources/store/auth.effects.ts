@@ -23,42 +23,62 @@ export class AuthEffects {
         this.authService.logIn(action.authRequest).pipe(
           map((authResult) => {
             if (authResult.succeeded){
+              this.authService.setTokens(authResult);
               return AuthActions.loginSuccess({authResult:authResult});
             }else{
-              return AuthActions.loginFailure({ error: authResult.errors.toString() });
+              return AuthActions.loginFailure({ error: authResult.errors.toString()});
             }
           }),
           catchError((error) => {
             return of(AuthActions.loginFailure({ error: error?.error?.errors  ?? {}}))
-          }
-          )
+          })
         )
       )
     );
   });
 
-  loginFailure$ = createEffect(
-    () => {
+  loginSuccess$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(AuthActions.loginSuccess),
+      concatMap(() => of(AuthActions.getCurrentUserInfo()))  
+    )
+  });
+
+  loginFailure$ = createEffect(() => {
       return this.actions$.pipe(
         ofType(AuthActions.loginFailure),
-        tap(() => this.authService.logOut())
-      );
-    },
-    { dispatch: false }
-  );
-
-  logout$ = createEffect(
-    () => {
-      return this.actions$.pipe(
-        ofType(AuthActions.logout),
-        exhaustMap(() => this.authService.deleteRefreshToken()),
-        tap(() => {
+        concatMap((action) => {
           this.authService.logOut();
+          return of(AuthActions.getCurrentUserInfoFailure({error:action.error}))
         })
       );
-    },
-    { dispatch: false }
+  });
+
+  logout$ = createEffect(() => {
+      return this.actions$.pipe(
+        ofType(AuthActions.logout),
+        concatMap(() => {
+          this.authService.logOut();
+          return of(AuthActions.clearCurrentUserInfo())
+        }),
+      );
+    }
   );
+
+  getCurrentUserInfo$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(AuthActions.getCurrentUserInfo),
+      concatMap(() => 
+        this.authService.getCurrentUserInfo().pipe(
+          map((user) => AuthActions.getCurrentUserInfoSuccess({user:user})),
+          catchError((error) => {
+            return of(AuthActions.getCurrentUserInfoFailure({ error: error?.error?.errors  ?? {}}))
+          })
+        )  
+      )
+    )
+  });
+
 
   constructor(private actions$: Actions, private authService: AuthService) {}
 }
