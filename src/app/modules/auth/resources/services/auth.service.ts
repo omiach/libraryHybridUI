@@ -36,6 +36,9 @@ export class AuthService implements AuthInterface  {
         else{
             this.logOut();
         } */
+        console.log('this.mockUsers');
+        console.log(this.mockUsers);
+        console.log(authRequest.name);
         if(this.mockUsers.find(x => x.name === authRequest.name && x.password === authRequest.password)){
             return of({token:authRequest.name, refreshToken:authRequest.name + '_refreshToken',succeeded:true,errors:[]});
         } 
@@ -46,6 +49,8 @@ export class AuthService implements AuthInterface  {
 
     getCurrentUserInfo():Observable<User>{
         const users = JSON.parse(localStorage.getItem('mockUsers')) as User[];
+        console.log('users');
+        console.log(users);
         const token = localStorage.getItem(this.authConstants.ACCES_TOKEN_KEY);
         return of(users.find(x => x.name === token))
     }
