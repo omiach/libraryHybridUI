@@ -31,16 +31,16 @@ const shellComponent = {
     `
     <nav class="navbar navbar-expand-lg navbar-dark bg-primary" aria-label="Fifth navbar example">
       <div class="container-fluid">
-        <a class="navbar-brand" href="#">Library</a>
+        <a class="navbar-brand" ui-sref="shell">Library</a>
         <button class="navbar-toggler collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#navbarsExample05" aria-controls="navbarsExample05" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
         </button>
 
         <div class="navbar-collapse collapse" id="navbarsExample05" style="">
           <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-            <li class="nav-item">
+            <!-- <li class="nav-item">
               <a class="nav-link active" aria-current="page" href="#">Home</a>
-            </li>
+            </li> -->
           </ul>
 
           <div
@@ -52,10 +52,10 @@ const shellComponent = {
           <div 
             ng-if="!($ctrl.isLoggedIn$ | async:this)"
             class="d-flex px-6 ms-20">
-            <button 
+            <a ui-sref="registration"
               class="btn btn-muted text-light">
                 Register
-            </button>  
+            </a>  
             <a ui-sref="login" class="btn btn-muted text-light">Login</a>    
           </div>
 

@@ -1,5 +1,6 @@
 export * from "./auth.module";
 
 import "./auth.state";
-import "./login/login.component";
+import "./components/login/login.component";
+import "./components/registration/registration.component";
 import "./resources/services/auth.service";

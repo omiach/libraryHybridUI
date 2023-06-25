@@ -1,11 +1,11 @@
-import { mainModule } from '../../../core/main.module';
-import { AuthRequest } from '../resources/models/authRequest';
-import { AuthInterface } from '../resources/services/auth.service';
+import { mainModule } from '../../../../core/main.module';
+import { AuthRequest } from '../../resources/models/authRequest';
+import { AuthInterface } from '../../resources/services/auth.service';
 import { Store } from '@ngrx/store';
-import * as authActions from '../resources/store/auth.actions';
-import * as AuthSelectors from '../resources/store/auth.selectors';
+import * as authActions from '../../resources/store/auth.actions';
+import * as AuthSelectors from '../../resources/store/auth.selectors';
 import { Observable, catchError, of, switchMap, take } from 'rxjs';
-import { User } from '../resources/models/user';
+import { User } from '../../resources/models/user';
 import { StateService } from '@uirouter/core';
 
 
@@ -83,7 +83,6 @@ const loginComponent = {
           <div style="width: 400px;" d-flex justify-content-center align-items-center>
             <div class="text-center">
               <h1>Library</h1>
-              <div ng-if="$ctrl.user$ !== undefine">USER NAME: {{ ($ctrl.user$ | async:this).name }}</div>
             </div>
             <div class="mb-3" >
               <label for="loginName" class="form-label">User name</label>
