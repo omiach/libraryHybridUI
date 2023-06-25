@@ -5,8 +5,6 @@ import { authHookRunBlock } from './hooks/requiresAuth.hook';
 import { sharedModule } from '../shared/shared.module';
 import { downgradeInjectable } from '@angular/upgrade/static';
 import { Store } from '@ngrx/store';
-import { AuthEffects } from '../modules/auth/resources/store/auth.effects';
-import { EffectsModule } from '@ngrx/effects';
 
 export const mainModule = angular.module('main', [
     'ui.router',
@@ -14,5 +12,5 @@ export const mainModule = angular.module('main', [
     sharedModule.name,
     asyncFilterModule
 ])
-.factory('storeService',downgradeInjectable(Store))
-.run(authHookRunBlock);
+.factory('store',downgradeInjectable(Store));
+//.run(authHookRunBlock);

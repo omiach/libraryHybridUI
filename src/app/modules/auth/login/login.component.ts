@@ -4,24 +4,27 @@ import { AuthInterface } from '../resources/services/auth.service';
 import { Store } from '@ngrx/store';
 import * as authActions from '../resources/store/auth.actions';
 import * as AuthSelectors from '../resources/store/auth.selectors';
-import { Observable, catchError, of, switchMap } from 'rxjs';
+import { Observable, catchError, of, switchMap, take } from 'rxjs';
 import { User } from '../resources/models/user';
+import { StateService } from '@uirouter/core';
 
 
 class LoginController {
-    static $inject = ['authService','storeService'];
+    static $inject = ['authService','store','$state'];
     user$:Observable<User>;
     login$:Observable<boolean>;
-    authService!:AuthInterface;
-    storeService!:Store;
+    authService:AuthInterface;
+    store:Store;
+    $state:StateService;
     formData:AuthRequest = {
       name:'',
       password:''
     };
 
-    constructor(authService, storeService) {
+    constructor(authService, store, $state) {
       this.authService = authService;
-      this.storeService = storeService;
+      this.store = store;
+      this.$state = $state;
     }
 
     $onInit = function() { 
@@ -34,20 +37,21 @@ class LoginController {
     }
 
     initLogin(){
-      this.user$ = this.storeService.select(AuthSelectors.selectUser);
+      this.user$ = this.store.select(AuthSelectors.selectUser);
       this.login$ = this.authService.logIn(this.formData).pipe(
+        take(1),
         switchMap((result) => {
           if (result.succeeded){
             this.authService.setTokens(result);
-            this.storeService.dispatch(authActions.loginSuccess({authResult:result}));
             return this.authService.getCurrentUserInfo().pipe(
               switchMap((user) => {
-                this.storeService.dispatch(authActions.getCurrentUserInfoSuccess({user:user}))
+                this.store.dispatch(authActions.getCurrentUserInfoSuccess({user:user}));
+                this.$state.go('shell');
                 return of(true);
               }),
               catchError((error) => {
                 this.authService.logOut();
-                this.storeService.dispatch(authActions.getCurrentUserInfoFailure({error: error?.error?.errors}));
+                this.store.dispatch(authActions.getCurrentUserInfoFailure({error: error?.error?.errors}));
                 console.log('ERROR - ' + error?.error?.errors.toString());
                 return of(false);
               })
@@ -55,14 +59,14 @@ class LoginController {
           }
           else{
             this.authService.logOut();  
-            this.storeService.dispatch(authActions.loginFailure({error: result.errors}));
+            this.store.dispatch(authActions.loginFailure({error: result.errors}));
             console.log('ERROR - ' + result.errors.toString());
             return of(false);
           }
         }),
         catchError((error) => {
           this.authService.logOut();      
-          this.storeService.dispatch(authActions.loginFailure({error: error?.error?.errors}));     
+          this.store.dispatch(authActions.loginFailure({error: error?.error?.errors}));     
           console.log('ERROR - ' + error?.error?.errors.toString()); 
           return of(false);
         })

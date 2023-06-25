@@ -3,15 +3,19 @@ import { AuthResult } from "../models/authResult";
 import { AuthRequest } from "../models/authRequest";
 import { Observable, of } from "rxjs";
 import { User } from "../models/user";
+import { Store } from "@ngrx/store";
+import * as authActions from '../store/auth.actions';
 
 
 export class AuthService implements AuthInterface  {
-    static $inject = ['authConstants'];
+    static $inject = ['authConstants','store'];
     authConstants:authConstantsInterface;
     mockUsers:AuthRequest[];
+    store:Store;
 
-    constructor(authConstants) {
+    constructor(authConstants, store) {
         this.authConstants = authConstants;
+        this.store = store;
         this.generateMockUsers();
     }
 
@@ -19,26 +23,19 @@ export class AuthService implements AuthInterface  {
         return !!localStorage.getItem(this.authConstants.ACCES_TOKEN_KEY) && !!localStorage.getItem(this.authConstants.REFRESH_TOKEN_KEY);
     }
 
-    setTokens(loginResult:AuthResult){
-        localStorage.setItem(this.authConstants.ACCES_TOKEN_KEY, loginResult.token);
-        localStorage.setItem(this.authConstants.REFRESH_TOKEN_KEY, loginResult.refreshToken);
+    setTokens(authResult:AuthResult){
+        localStorage.setItem(this.authConstants.ACCES_TOKEN_KEY, authResult.token);
+        localStorage.setItem(this.authConstants.REFRESH_TOKEN_KEY, authResult.refreshToken);
+        this.store.dispatch(authActions.loginSuccess({authResult:authResult}));
     }
 
     logOut(){
         localStorage.removeItem(this.authConstants.ACCES_TOKEN_KEY);
         localStorage.removeItem(this.authConstants.REFRESH_TOKEN_KEY);
+        this.store.dispatch(authActions.logout());
     }
 
     logIn(authRequest:AuthRequest):Observable<AuthResult>{
-/*         if(this.mockUsers.find(x => x.name === authRequest.name && x.password === authRequest.password)){
-            this.setTokens({token:'token', refreshToken:'refreshToken',succeeded:true,twoFactorCodeRequired:false,errors:[]});
-        }
-        else{
-            this.logOut();
-        } */
-        console.log('this.mockUsers');
-        console.log(this.mockUsers);
-        console.log(authRequest.name);
         if(this.mockUsers.find(x => x.name === authRequest.name && x.password === authRequest.password)){
             return of({token:authRequest.name, refreshToken:authRequest.name + '_refreshToken',succeeded:true,errors:[]});
         } 
@@ -49,8 +46,6 @@ export class AuthService implements AuthInterface  {
 
     getCurrentUserInfo():Observable<User>{
         const users = JSON.parse(localStorage.getItem('mockUsers')) as User[];
-        console.log('users');
-        console.log(users);
         const token = localStorage.getItem(this.authConstants.ACCES_TOKEN_KEY);
         return of(users.find(x => x.name === token))
     }

@@ -1,7 +1,7 @@
 import { mainModule } from "../../core/main.module";
 
   const loginState = {
-    parent:'app',
+    parent:'shell',
     name: 'login',
     url:'/login',
     component: 'login'
