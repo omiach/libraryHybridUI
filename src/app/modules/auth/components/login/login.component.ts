@@ -1,18 +1,15 @@
-import { mainModule } from '../../../../core/main.module';
+import { authModule } from '../../auth.module';
 import { AuthRequest } from '../../resources/models/authRequest';
 import { AuthInterface } from '../../resources/services/auth.service';
 import { Store } from '@ngrx/store';
 import * as authActions from '../../resources/store/auth.actions';
-import * as AuthSelectors from '../../resources/store/auth.selectors';
 import { Observable, catchError, of, switchMap, take } from 'rxjs';
-import { User } from '../../resources/models/user';
 import { StateService } from '@uirouter/core';
 
 
 class LoginController {
     static $inject = ['authService','store','$state'];
-    user$:Observable<User>;
-    login$:Observable<boolean>;
+    login$:Observable<void>;
     authService:AuthInterface;
     store:Store;
     $state:StateService;
@@ -37,7 +34,6 @@ class LoginController {
     }
 
     initLogin(){
-      this.user$ = this.store.select(AuthSelectors.selectUser);
       this.login$ = this.authService.logIn(this.formData).pipe(
         take(1),
         switchMap((result) => {
@@ -47,28 +43,28 @@ class LoginController {
               switchMap((user) => {
                 this.store.dispatch(authActions.getCurrentUserInfoSuccess({user:user}));
                 this.$state.go('shell');
-                return of(true);
+                return of();
               }),
               catchError((error) => {
                 this.authService.logOut();
                 this.store.dispatch(authActions.getCurrentUserInfoFailure({error: error?.error?.errors}));
-                console.log('ERROR - ' + error?.error?.errors.toString());
-                return of(false);
+                alert('ERROR - ' + error?.error?.errors.toString());
+                return of();
               })
             )            
           }
           else{
             this.authService.logOut();  
             this.store.dispatch(authActions.loginFailure({error: result.errors}));
-            console.log('ERROR - ' + result.errors.toString());
-            return of(false);
+            alert('ERROR - ' + result.errors.toString());
+            return of();
           }
         }),
         catchError((error) => {
           this.authService.logOut();      
           this.store.dispatch(authActions.loginFailure({error: error?.error?.errors}));     
-          console.log('ERROR - ' + error?.error?.errors.toString()); 
-          return of(false);
+          alert('ERROR - ' + error?.error?.errors.toString()); 
+          return of();
         })
       );
     }
@@ -100,5 +96,5 @@ const loginComponent = {
     `
   };
   
-  mainModule.component('login', loginComponent);
+  authModule.component('login', loginComponent);
   

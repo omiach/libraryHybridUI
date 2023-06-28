@@ -4,7 +4,7 @@ import { AuthResult } from "../models/authResult";
 import { User } from "../models/user";
 
 export const login = createAction(
-  '[Login Component] Login User',
+  '[Auth Effect] Login User',
   props<{authRequest:AuthRequest}>()
 );
 
@@ -19,11 +19,11 @@ export const loginFailure = createAction(
 );
 
 export const logout = createAction(
-  '[Shell Component] Logout'
+  '[Auth Effect] Logout'
 );
 
 export const getCurrentUserInfo = createAction(
-  '[Shell Component] Get current user info',
+  '[Auth Effect] Get current user info',
 );
 
 export const getCurrentUserInfoSuccess = createAction(
