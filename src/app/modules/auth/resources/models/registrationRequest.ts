@@ -1,4 +1,4 @@
-export interface User{
+export interface RegistrationRequest {
     name: string;
     address:string;
     dateOfBirth:Date | null;

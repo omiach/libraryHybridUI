@@ -7,17 +7,20 @@ import * as AuthSelectors from '../../resources/store/auth.selectors';
 import { Observable, catchError, of, switchMap, take } from 'rxjs';
 import { User } from '../../resources/models/user';
 import { StateService } from '@uirouter/core';
-
+import { RegistrationRequest } from '../../resources/models/registrationRequest';
 
 class RegistrationController {
     static $inject = ['authService','store','$state'];
     user$:Observable<User>;
-    login$:Observable<boolean>;
+    registration$:Observable<boolean>;
     authService:AuthInterface;
     store:Store;
     $state:StateService;
-    formData:AuthRequest = {
+    formData:RegistrationRequest = {
       name:'',
+      address:'',
+      dateOfBirth:null,
+      phone:0,
       password:''
     };
 
@@ -32,42 +35,31 @@ class RegistrationController {
     };
 
     submitForm(){
-      this.initLogin();
-      this.login$.subscribe();
+      this.initRegistration();
+      this.registration$.subscribe();
     }
 
-    initLogin(){
-      this.user$ = this.store.select(AuthSelectors.selectUser);
-      this.login$ = this.authService.logIn(this.formData).pipe(
+    initRegistration(){
+      this.registration$ = this.authService.registration(this.formData).pipe(
         take(1),
-        switchMap((result) => {
-          if (result.succeeded){
-            this.authService.setTokens(result);
-            return this.authService.getCurrentUserInfo().pipe(
-              switchMap((user) => {
-                this.store.dispatch(authActions.getCurrentUserInfoSuccess({user:user}));
-                this.$state.go('shell');
-                return of(true);
-              }),
-              catchError((error) => {
-                this.authService.logOut();
-                this.store.dispatch(authActions.getCurrentUserInfoFailure({error: error?.error?.errors}));
-                console.log('ERROR - ' + error?.error?.errors.toString());
-                return of(false);
-              })
-            )            
-          }
-          else{
-            this.authService.logOut();  
-            this.store.dispatch(authActions.loginFailure({error: result.errors}));
-            console.log('ERROR - ' + result.errors.toString());
-            return of(false);
-          }
+        switchMap(responce => {
+          this.authService.setTokens(responce);
+          return this.authService.getCurrentUserInfo().pipe(
+            switchMap((user) => {
+              this.store.dispatch(authActions.getCurrentUserInfoSuccess({user:user}));
+              this.$state.go('shell');
+              return of(true);
+            }),
+            catchError((error) => {
+              this.authService.logOut();
+              this.store.dispatch(authActions.getCurrentUserInfoFailure({error: error?.error?.errors}));
+              console.log('ERROR - ' + error?.error?.errors.toString());
+              return of(false);
+            })
+          )         
         }),
         catchError((error) => {
-          this.authService.logOut();      
-          this.store.dispatch(authActions.loginFailure({error: error?.error?.errors}));     
-          console.log('ERROR - ' + error?.error?.errors.toString()); 
+          console.log('ERROR - ' + error?.error?.errors.toString());   
           return of(false);
         })
       );
@@ -82,7 +74,7 @@ const registrationComponent = {
         <form>
           <div style="width: 400px;" d-flex justify-content-center align-items-center>
             <div class="text-center">
-              <h1>Library registration</h1>
+              <h1>Registration</h1>
             </div>
             <div class="mb-3" >
               <label for="loginName" class="form-label">User name</label>
@@ -98,7 +90,7 @@ const registrationComponent = {
             </div>
             <div class="mb-3" >
               <label for="phone" class="form-label">Phone</label>
-              <input type="date" class="form-control" id="phone" ng-model="$ctrl.formData.dateOfBirth">
+              <input type="input" class="form-control" id="phone" space  ui-mask="999-999-9999" ui-mask-placeholder-char="space" ng-model="$ctrl.formData.phone">
             </div>
             <div class="mb-3">
               <label for="loginPassword" class="form-label">Password</label>
