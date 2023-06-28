@@ -5,9 +5,9 @@ const mainState = {
     name: 'shell',
     url:"/",
     component: 'shell',
-    data: {
+/*     data: {
       requiresAuth:true
-    }
+    } */
   };
   
 mainModule.config(['$stateProvider', ($stateProvider) => {

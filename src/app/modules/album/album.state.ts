@@ -1,4 +1,4 @@
-import { mainModule } from "../../core/main.module";
+import { albumModule } from "./album.module";
 
   const albumState = {
     parent:'shell',
@@ -7,6 +7,6 @@ import { mainModule } from "../../core/main.module";
     component: 'album'
   }
 
-mainModule.config(['$stateProvider', ($stateProvider) => {
+albumModule.config(['$stateProvider', ($stateProvider) => {
   $stateProvider.state(albumState);
 }]);
