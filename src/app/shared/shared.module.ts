@@ -3,5 +3,6 @@ import * as constants from './constants/constants';
 
 export const sharedModule = angular.module('shared', [
 ])
-.constant('authConstants',constants.authConstants);
+.constant('authConstants',constants.authConstants)
+.constant('mocksConstants',constants.mocksConstants);
 
