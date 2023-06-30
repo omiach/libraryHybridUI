@@ -5,7 +5,8 @@ export interface AuthConstantsInterface{
 
 export interface MocksKeys{
     USERS:string,
-    BOOKS:string
+    BOOKS:string,
+    BOOKS_RESERVES:string
 }
 
 export const authConstants:AuthConstantsInterface = {
@@ -15,5 +16,6 @@ export const authConstants:AuthConstantsInterface = {
 
 export const mocksConstants:MocksKeys = {
     USERS: 'mockUsers',
-    BOOKS: 'mockBooks'
+    BOOKS: 'mockBooks',
+    BOOKS_RESERVES:'mockBooksReserves'
 }

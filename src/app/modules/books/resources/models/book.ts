@@ -5,4 +5,5 @@ export interface Book {
     publishingHouse:string;
     yearOfPublishing:Date;
     owner:string;
+    available:boolean;
 }
