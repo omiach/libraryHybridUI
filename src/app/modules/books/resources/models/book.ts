@@ -6,4 +6,5 @@ export interface Book {
     yearOfPublishing:Date;
     owner:string;
     available:boolean;
+    reservedBy?:string;
 }

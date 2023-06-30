@@ -1,12 +1,9 @@
- import { Observable, of } from "rxjs";
+ import { Observable, catchError, concatMap, of, switchMap, take } from "rxjs";
 import { Store } from "@ngrx/store";
 import { Book } from "../models/book";
 import { MocksKeys } from "src/app/shared/constants/constants";
-import { bookApiResponce } from "../models/bookApiResponce";
 import { ApiResponce } from "src/app/shared/models/apiResponce";
-import { Reserve } from "../models/reserve";
-import { forEach } from "angular";
-
+import * as AuthSelectors from "../../../auth/resources/store/auth.selectors";
 
 export class BooksService implements BooksServiceInterface  {
     static $inject = ['store','mocksConstants'];
@@ -39,9 +36,9 @@ export class BooksService implements BooksServiceInterface  {
         return of({...responce, success:true});
     }
 
-    editBook(book:Book){
+    editBook(book:Book):Observable<ApiResponce<null>>{
 
-        const responce:bookApiResponce = {
+        const responce:ApiResponce<null> = {
             success:false,
             errors:[]
         } 
@@ -65,7 +62,7 @@ export class BooksService implements BooksServiceInterface  {
 
     getBooks():Observable<ApiResponce<Book[]>>{
 
-        const responce:bookApiResponce = {
+        const responce:ApiResponce<Book[]> = {
             success:false,
             errors:[]
         } 
@@ -75,16 +72,16 @@ export class BooksService implements BooksServiceInterface  {
             return of({...responce, errors:['connection error']});
         }
 
-        let reserves = JSON.parse(localStorage.getItem(this.mocksKeys.BOOKS_RESERVES)) as Reserve[];  
+/*         let reserves = JSON.parse(localStorage.getItem(this.mocksKeys.BOOKS_RESERVES)) as Reserve[];  
         if (reserves){
             this.joinReservesToBooks(books,reserves);
-        }     
+        }      */
 
 
         return of({...responce, success:true, data:books});
     }
 
-    joinReservesToBooks(books:Book[],reserves:Reserve[]){
+/*     joinReservesToBooks(books:Book[],reserves:Reserve[]){
         for (const reserve of reserves) {
             const bookIndex = books.findIndex(x => x.Id === reserve.bookId);
             if(!bookIndex){
@@ -93,11 +90,15 @@ export class BooksService implements BooksServiceInterface  {
 
             books[bookIndex].available = false;
         }
-    }
+    } */
 
-    reserveBook(bookId:number):Observable<ApiResponce<null>>{
+    reserveBook(bookId:number, reserve?:boolean):Observable<ApiResponce<null>>{
         
-        const responce:bookApiResponce = {
+        if (reserve === undefined) {
+            reserve = true; 
+          }
+        
+        const responce:ApiResponce<null> = {
             success:false,
             errors:[]
         } 
@@ -106,6 +107,23 @@ export class BooksService implements BooksServiceInterface  {
         if(!books){
             return of({...responce, errors:['connection error']});
         }
+
+        return this.store.select(AuthSelectors.selectUser).pipe(
+            take(1),
+            concatMap((user) => {
+                const bookindex = books.findIndex(x => x.Id === bookId);
+                if(!bookindex){
+                    return of({...responce, errors:['book not found']});                            
+                }
+                books[bookindex].available = !reserve;
+                books[bookindex].reservedBy = reserve ? user.name : null;
+                localStorage.setItem(this.mocksKeys.BOOKS, JSON.stringify(books));
+                return of({...responce, success:true});
+            }),
+            catchError((error) => {
+                return of({...responce, error:error})
+            })
+        );
 
     }
 
@@ -131,6 +149,9 @@ export class BooksService implements BooksServiceInterface  {
 }
 
 export interface BooksServiceInterface{
-
+    addBook(book:Book):Observable<ApiResponce<null>>;
+    editBook(book:Book):Observable<ApiResponce<null>>;
+    getBooks():Observable<ApiResponce<Book[]>>;
+    reserveBook(bookId:number, reserve?:boolean):Observable<ApiResponce<null>>
 }
 
