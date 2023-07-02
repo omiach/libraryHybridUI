@@ -31,7 +31,7 @@ class LoginController {
       this.initLogin().subscribe();
     }
 
-    initLogin():Observable<never>{
+    initLogin():Observable<null>{
       return this.authService.logIn(this.formData).pipe(
         take(1),
         switchMap((result) => {
@@ -66,7 +66,6 @@ class LoginController {
         })
       );
     }
-    //h-100 conteiner d-flex justify-content-center align-items-center
 }
 
 const loginComponent = {

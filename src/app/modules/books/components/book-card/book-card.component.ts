@@ -22,9 +22,7 @@ class BookCardController {
 
     $onInit = function() { 
       this.user$ = this.store.select(AuthSelectors.selectUser);
-    };
-
-    
+    }; 
 
 }
 

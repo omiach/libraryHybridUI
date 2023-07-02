@@ -26,12 +26,12 @@ class BookListController {
     }
 
     $onInit = function() { 
+      this.getBooks().subscribe();
       this.books$ = this.store.select(BooksSelectors.selectBooks);
       this.user$ = this.store.select(AuthSelectors.selectUser);
-      this.initBooks().subscribe();
     };
 
-    initBooks():Observable<never>{ 
+    getBooks():Observable<null>{ 
 
       return this.booksService.getBooks().pipe(
         take(1),

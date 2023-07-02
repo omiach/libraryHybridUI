@@ -32,12 +32,12 @@ class ShellController {
       if (!this.authService.isAuthenticated()){
         return;
       }
-      const userInfo$ = this.initUserInfo();
-      userInfo$.subscribe();
 
+      this.initUserInfo().subscribe();
+      
     }
 
-    initUserInfo():Observable<never>{
+    initUserInfo():Observable<null>{
       return this.authService.getCurrentUserInfo().pipe(
         take(1),
         switchMap((user) => {
