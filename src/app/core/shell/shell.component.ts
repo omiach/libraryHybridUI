@@ -57,7 +57,7 @@ class ShellController {
 const shellComponent = {
     controller: ShellController,
     template:
-    `<div class="flex-fill d-flex flex-column"> 
+    `<div class="flex-fill d-flex flex-column bg-light"> 
       <nav class="navbar navbar-expand-lg navbar-dark bg-dark" aria-label="Fifth navbar example">
         <div class="container-fluid">
           <a class="navbar-brand" ui-sref="shell">Library</a>

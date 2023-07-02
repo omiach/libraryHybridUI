@@ -73,10 +73,9 @@ class RegistrationController {
 const registrationComponent = {
     controller: RegistrationController,
     template:
-    `<div class="h-100 conteiner d-flex justify-content-center align-items-center" >
-        
+    `<div class="flex-fill conteiner d-flex justify-content-center align-items-center" >  
         <form>
-          <div style="width: 400px;" d-flex justify-content-center align-items-center>
+          <div style="width: 400px;">
             <div class="text-center">
               <h1>Registration</h1>
             </div>

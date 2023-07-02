@@ -9,7 +9,6 @@ import { StateService } from '@uirouter/core';
 
 class LoginController {
     static $inject = ['authService','store','$state'];
-    login$:Observable<void>;
     authService:AuthInterface;
     store:Store;
     $state:StateService;
@@ -29,12 +28,11 @@ class LoginController {
     };
 
     submitForm(){
-      this.initLogin();
-      this.login$.subscribe();
+      this.initLogin().subscribe();
     }
 
-    initLogin(){
-      this.login$ = this.authService.logIn(this.formData).pipe(
+    initLogin():Observable<never>{
+      return this.authService.logIn(this.formData).pipe(
         take(1),
         switchMap((result) => {
           if (result.succeeded){
@@ -68,30 +66,30 @@ class LoginController {
         })
       );
     }
+    //h-100 conteiner d-flex justify-content-center align-items-center
 }
 
 const loginComponent = {
     controller: LoginController,
     template:
-    `<div class="h-100 conteiner d-flex justify-content-center align-items-center" >
-        
-        <form>
-          <div style="width: 400px;" d-flex justify-content-center align-items-center>
-            <div class="text-center">
-              <h1>Library</h1>
-            </div>
-            <div class="mb-3" >
-              <label for="loginName" class="form-label">User name</label>
-              <input type="input" class="form-control" id="loginName" ng-model="$ctrl.formData.name">
-            </div>
-            <div class="mb-3">
-              <label for="loginPassword" class="form-label">Password</label>
-              <input type="password" class="form-control" id="loginPassword" ng-model="$ctrl.formData.password">
-            </div>
-              <button type="submit" class="btn btn-primary w-100" ng-click="$ctrl.submitForm()">Submit</button>
-            </div>
+    `
+    <div class="flex-fill conteiner d-flex justify-content-center align-items-center">
+      <form>
+        <div style="width: 400px;">
+          <div class="text-center">
+            <h1>Library</h1>
+          </div>
+          <div class="mb-3" >
+            <label for="loginName" class="form-label">User name</label>
+            <input type="input" class="form-control" id="loginName" ng-model="$ctrl.formData.name">
+          </div>
+          <div class="mb-3">
+            <label for="loginPassword" class="form-label">Password</label>
+            <input type="password" class="form-control" id="loginPassword" ng-model="$ctrl.formData.password">
+          </div>
+            <button type="submit" class="btn btn-primary w-100" ng-click="$ctrl.submitForm()">Submit</button>
+          </div>
       </form>
-
     </div>
     `
   };

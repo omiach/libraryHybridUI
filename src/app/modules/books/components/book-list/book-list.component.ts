@@ -5,15 +5,18 @@ import { Observable, catchError, of, switchMap, take } from 'rxjs';
 import { Book } from '../../resources/models/book';
 import * as BooksSelectors from '../../resources/store/books.selectors';
 import * as BooksActions from '../../resources/store/books.actions';
-import { BooksService, BooksServiceInterface } from '../../resources/services/books.service';
+import { BooksServiceInterface } from '../../resources/services/books.service';
+import { User } from '../../../auth/resources/models/user';
+import * as AuthSelectors from '../../../auth/resources/store/auth.selectors';
 
 
 class BookListController {
     static $inject = ['store','$state','booksService'];
     store:Store;
     $state:StateService;
-    booksService:BooksService;
+    booksService:BooksServiceInterface;
     books$:Observable<Book[]>;
+    user$:Observable<User>;
 
 
     constructor( store, $state,booksService) {
@@ -24,6 +27,7 @@ class BookListController {
 
     $onInit = function() { 
       this.books$ = this.store.select(BooksSelectors.selectBooks);
+      this.user$ = this.store.select(AuthSelectors.selectUser);
       this.initBooks().subscribe();
     };
 
@@ -55,8 +59,14 @@ const bookListComponent = {
     controller: BookListController,
     template:
     `
-    <div class="album py-5 bg-light flex-fill">
+    <div class="album py-5 flex-fill">
       <div class="container">
+        <div ng-if="$ctrl.user$ | async:this"
+          class="d-flex justify-content-end mb-3">
+          <button type="button" class="btn btn-dark ms-3">
+            Add book
+          </button>
+        </div>
         <div class="row row-cols-1 row-cols-sm-1 row-cols-md-2 row-cols-lg-2 row-cols-xl-3 row-cols-xl-4 g-3">
           <book-card ng-repeat="book in $ctrl.books$ | async:this" book="book"></book-card>
         </div>
