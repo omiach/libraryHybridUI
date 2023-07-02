@@ -1,8 +1,8 @@
  import { Observable, catchError, concatMap, of, switchMap, take } from "rxjs";
 import { Store } from "@ngrx/store";
 import { Book } from "../models/book";
-import { MocksKeys } from "src/app/shared/constants/constants";
-import { ApiResponce } from "src/app/shared/models/apiResponce";
+import { MocksKeys } from "../../../../shared/constants/constants";
+import { ApiResponce } from "../../../../shared/models/apiResponce";
 import * as AuthSelectors from "../../../auth/resources/store/auth.selectors";
 
 export class BooksService implements BooksServiceInterface  {

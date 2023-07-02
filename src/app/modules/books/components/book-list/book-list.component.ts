@@ -24,7 +24,7 @@ class BookListController {
 
     $onInit = function() { 
       this.books$ = this.store.select(BooksSelectors.selectBooks);
-      this.initBooks.subscribe();
+      this.initBooks().subscribe();
     };
 
     initBooks():Observable<never>{ 
