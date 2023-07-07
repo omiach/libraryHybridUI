@@ -11,4 +11,9 @@ export const selectBooks = createSelector(
     (state): Book[] | null => state.books
 );
 
+export const selectCurrentBook = createSelector(
+    selectBooksState,
+    (state): Book | null => state.currentBook
+);
+
 

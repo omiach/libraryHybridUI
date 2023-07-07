@@ -7,11 +7,13 @@ export const booksFeatureKey = 'books';
 export interface State {
     books: Book[] | null;
     error: any;
+    currentBook:Book;
   }
 
 export const initialState: State = {
     books: null,
     error: null,
+    currentBook:null
 };
 
 export const reducer = createReducer(
@@ -29,6 +31,18 @@ export const reducer = createReducer(
           ...state,
           books: null,
           error: action.error,
+        };
+      }),
+      on(BooksActions.setCurrentBook, (state, action) => {
+        return {
+          ...state,
+          book:action.book,
+        };
+      }),
+      on(BooksActions.clearCurrentBook, (state) => {
+        return {
+          ...state,
+          book:null,
         };
       }),
 );

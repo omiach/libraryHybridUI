@@ -6,6 +6,7 @@ import { Book } from '../../resources/models/book';
 import { Observable, catchError, take } from 'rxjs';
 import { User } from '../../../auth/resources/models/user';
 import * as AuthSelectors from '../../../auth/resources/store/auth.selectors';
+import * as BookActions from '../../resources/store/books.actions';
 import { BooksServiceInterface } from '../../resources/services/books.service';
 import { ApiResponce } from '../../../../shared/models/apiResponce';
 
@@ -16,7 +17,8 @@ class BookInfoController {
     $state:StateService;
     user$:Observable<User>;
     booksService:BooksServiceInterface;
-    book:Book = {
+    book:Book | null = null; 
+/*     {
       id:0,
       name:'',
       author:'',
@@ -25,7 +27,7 @@ class BookInfoController {
       available:false,
       owner:'',
       reservedBy:''
-    };
+    }; */
 
     constructor( store, $state, booksService) {
       this.store = store;
@@ -59,16 +61,7 @@ class BookInfoController {
     }
 
     clearBook(){
-      this.book = {
-        id:0,
-        name:'',
-        author:'',
-        publishingHouse:'',
-        yearOfPublishing:null,
-        available:false,
-        owner:'',
-        reservedBy:''
-      }; 
+      this.store.dispatch(BookActions.clearCurrentBook());
     }
 }
 
@@ -79,74 +72,89 @@ const bookInfoComponent = {
     },
     template:
     `
-    <div class="col">
+    <div class="col mb-4">
       <div class="card shadow-sm">
-
-        <div class="card-body">
-          <form>
-         
-            <div class="col">
+        <form>
+          <div class="card-body row">
             
-              <div class="mb-3" hidden>
-                <input type="input" class="form-control" id="id" ng-model="$ctrl.book.id">
-              </div>
-
-              <div class="mb-3">
-                <label for="name" class="form-label">Name</label>
-                <input type="input" class="form-control" id="name" ng-model="$ctrl.book.name">
-              </div>
-
-              <div class="mb-3" >
-                <label for="author" class="form-label">Author</label>
-                <input type="input" class="form-control" id="author" ng-model="$ctrl.book.author">
-              </div>
-
-            </div>
-            
-            <div class="col">
-
-              <div class="mb-3" >
-                <label for="publishingHouse" class="form-label">Publishing house</label>
-                <input type="input" class="form-control" id="publishingHouse" ng-model="$ctrl.book.publishingHouse">
-              </div>
-
-              <div class="mb-3" >
-                <label for="yearOfPublishing" class="form-label">Year of publishing</label>
-                <input type="input" class="form-control" id="yearOfPublishing" ng-model="$ctrl.book.yearOfPublishing">
-              </div>
-
-            </div>
-
-            <div class="d-flex justify-content-between align-items-center">
+              <div class="col">
               
-              <div class="btn-group" ng-if="($ctrl.user$ | async:this).name === $ctrl.book.owner">
+                <div class="mb-3" hidden>
+                  <input type="input" class="form-control" id="id" ng-model="$ctrl.book.id">
+                </div>
 
-                <button 
-                  type="button" class="btn btn-sm btn-outline-secondary" ng-click="$ctrl.clearBook()">
-                  Clear
-                </button>
+                <div class="mb-3 row">
+                  <div class="col-3">
+                    <label for="name" class="form-label">Name</label>
+                  </div>
+                  
+                  <div class="col-9">
+                    <input type="input" class="form-control col-9 d-block" id="name" ng-model="$ctrl.book.name">
+                  </div>
+                </div>
 
-                <button 
-                  type="button" class="btn btn-sm btn-outline-secondary" ng-click="$ctrl.saveBookChanges()">
-                  Save
-                </button>
+                <div class="mb-3 row" >
+                  <div class="col-3">
+                    <label for="author" class="form-label">Author</label>
+                  </div>
+                  <div class="col-9">
+                    <input type="input" class="form-control" id="author" ng-model="$ctrl.book.author">
+                  </div>
+                </div>
+
+              </div>
+              
+              <div class="col">
+
+                <div class="mb-3 row">
+                  <div class="col-4">
+                    <label for="publishingHouse" class="form-label">Publishing house</label>
+                  </div>
+                  <div class="col-8">
+                    <input type="input" class="form-control" id="publishingHouse" ng-model="$ctrl.book.publishingHouse">
+                  </div>
+                </div>
+
+                <div class="mb-3 row" >
+                  <div class="col-4">
+                    <label for="yearOfPublishing" class="form-label">Year of publishing</label>
+                  </div>
+                  <div class="col-8">
+                    <input type="input" class="form-control" id="yearOfPublishing" ng-model="$ctrl.book.yearOfPublishing">
+                  </div>
+                </div>
 
               </div>
 
-              <div class="btn-group" ng-if="!($ctrl.book).id">
+              <div class="d-flex justify-content-end align-items-center">
+                
+                <div class="btn-group" ng-if="($ctrl.user$ | async:this).name === $ctrl.book.owner">
 
-                <button 
-                  type="button" class="btn btn-sm btn-outline-secondary" ng-click="$ctrl.addBook()">
-                  Add
-                </button>
+                  <button 
+                    type="button" class="btn btn-sm btn-outline-secondary" ng-click="$ctrl.clearBook()">
+                    Clear
+                  </button>
+
+                  <button 
+                    type="button" class="btn btn-sm btn-outline-secondary" ng-click="$ctrl.saveBookChanges()">
+                    Save
+                  </button>
+
+                </div>
+
+                <div class="btn-group" ng-if="!($ctrl.book).id">
+
+                  <button 
+                    type="button" class="btn btn-sm btn-outline-secondary" ng-click="$ctrl.addBook()">
+                    Add
+                  </button>
+
+                </div>
 
               </div>
 
-            </div>
-
-          <form>
-        </div>
-
+          </div>
+        <form>
       </div>
     </div>
     `

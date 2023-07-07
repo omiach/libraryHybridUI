@@ -17,6 +17,7 @@ class BookListController {
     booksService:BooksServiceInterface;
     books$:Observable<Book[]>;
     user$:Observable<User>;
+    currentBook$:Observable<Book>;
 
 
     constructor( store, $state,booksService) {
@@ -29,6 +30,7 @@ class BookListController {
       this.getBooks().subscribe();
       this.books$ = this.store.select(BooksSelectors.selectBooks);
       this.user$ = this.store.select(AuthSelectors.selectUser);
+      this.currentBook$ = this.store.select(BooksSelectors.selectCurrentBook);
     };
 
     getBooks():Observable<null>{ 
@@ -61,11 +63,8 @@ const bookListComponent = {
     `
     <div class="album py-5 flex-fill">
       <div class="container">
-        <div ng-if="$ctrl.user$ | async:this"
-          class="d-flex justify-content-end mb-3">
-          <button type="button" class="btn btn-dark ms-3">
-            Add book
-          </button>
+        <div class="col">
+          <book-info book="($ctrl.currentBook$ | async:this)"></book-info>
         </div>
         <div class="row row-cols-1 row-cols-sm-1 row-cols-md-2 row-cols-lg-2 row-cols-xl-3 row-cols-xl-4 g-3">
           <book-card ng-repeat="book in $ctrl.books$ | async:this" book="book"></book-card>

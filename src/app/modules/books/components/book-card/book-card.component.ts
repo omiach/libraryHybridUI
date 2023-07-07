@@ -6,6 +6,7 @@ import { Book } from '../../resources/models/book';
 import { Observable } from 'rxjs';
 import { User } from '../../../auth/resources/models/user';
 import * as AuthSelectors from '../../../auth/resources/store/auth.selectors';
+import * as BookActions from '../../resources/store/books.actions';
 
 
 class BookCardController {
@@ -24,6 +25,9 @@ class BookCardController {
       this.user$ = this.store.select(AuthSelectors.selectUser);
     }; 
 
+    editBook(){
+      this.store.dispatch(BookActions.setCurrentBook({book:this.book}));
+    }
 }
 
 const bookCardComponent = {
@@ -43,20 +47,24 @@ const bookCardComponent = {
           <div class="d-flex justify-content-between align-items-center">
             
             <div class="btn-group">
+
               <button 
-                ng-if=" $ctrl.user$ | async:this && $ctrl.book.available"
+                ng-if="($ctrl.user$ | async:this) && $ctrl.book.available"
                 type="button" class="btn btn-sm btn-outline-secondary">
                   Reserv
               </button>
+
               <button 
-                ng-if="$ctrl.user$ | async:this && ($ctrl.user$ | async:this).name === $ctrl.book.reservedBy"
+                ng-if="($ctrl.user$ | async:this) && ($ctrl.user$ | async:this).name === $ctrl.book.reservedBy"
                 type="button" class="btn btn-sm btn-outline-secondary">
                   Return
               </button>
+
             </div>
 
             <button 
-              ng-if="($ctrl.user$ | async:this).name === $ctrl.book.owner" 
+              ng-if="($ctrl.user$ | async:this).name === $ctrl.book.owner"
+              ng-click="$ctrl.editBook()" 
               type="button" class="btn btn-sm btn-outline-secondary">
                 Edit
             </button>

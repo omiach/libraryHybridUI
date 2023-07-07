@@ -16,3 +16,12 @@ export const getBooksFailure = createAction(
   '[Books component] Get books failure',
   props<{error:string[]}>()
 );
+
+export const setCurrentBook = createAction(
+  '[Books component] Set current book',
+  props<{book:Book}>()
+);
+
+export const clearCurrentBook = createAction(
+  '[Books component] Clear current book'
+);
