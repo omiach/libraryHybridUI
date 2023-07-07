@@ -30,7 +30,7 @@ export class BooksService implements BooksServiceInterface  {
             return of({...responce, errors:['connection error']});
         }
 
-        book.Id = books.length + 1;
+        book.id = books.length + 1;
         
         localStorage.setItem(this.mocksKeys.BOOKS, JSON.stringify(books.push(book)));
         return of({...responce, success:true});
@@ -48,7 +48,7 @@ export class BooksService implements BooksServiceInterface  {
             return of({...responce, errors:['connection error']});
         }
 
-        const editBookIndex = books.findIndex(x => x.Id === book.Id);   
+        const editBookIndex = books.findIndex(x => x.id === book.id);   
         if(!editBookIndex){
             return of({...responce, errors:['book not exist']}); 
         }
@@ -83,7 +83,7 @@ export class BooksService implements BooksServiceInterface  {
 
 /*     joinReservesToBooks(books:Book[],reserves:Reserve[]){
         for (const reserve of reserves) {
-            const bookIndex = books.findIndex(x => x.Id === reserve.bookId);
+            const bookIndex = books.findIndex(x => x.id === reserve.bookid);
             if(!bookIndex){
                 continue;
             }
@@ -111,7 +111,7 @@ export class BooksService implements BooksServiceInterface  {
         return this.store.select(AuthSelectors.selectUser).pipe(
             take(1),
             concatMap((user) => {
-                const bookindex = books.findIndex(x => x.Id === bookId);
+                const bookindex = books.findIndex(x => x.id === bookId);
                 if(!bookindex){
                     return of({...responce, errors:['book not found']});                            
                 }
@@ -130,16 +130,16 @@ export class BooksService implements BooksServiceInterface  {
     generateMockBooks(){
 
         const books:Book[] = [
-            {Id:1, name: "The Lord of the Rings", author:"Tolkien", publishingHouse:'pb h #1', yearOfPublishing: new Date(2010,1,1), owner:'user1',available:true},
-            {Id:2, name: "A Song of Ice and Fire", author:"George Martin", publishingHouse:'pb h #1', yearOfPublishing: new Date(2010,1,1), owner:'user1',available:true},
-            {Id:3, name: "Jonathan Strange & Mr Norrell", author:"Susanna Clarke", publishingHouse:'pb h #1', yearOfPublishing: new Date(2010,1,1), owner:'user2',available:true},
-            {Id:4, name: "American Gods", author:"Neil Gaiman", publishingHouse:'pb h #1', yearOfPublishing: new Date(2010,1,1), owner:'user2',available:true},
-            {Id:5, name: "Assassin’s Apprentice", author:"Robin Hobb", publishingHouse:'pb h #1', yearOfPublishing: new Date(2010,1,1), owner:'user3',available:true},
-            {Id:6, name: "Murder on the Orient Express", author:"Agatha Christie", publishingHouse:'pb h #1', yearOfPublishing: new Date(2010,1,1), owner:'user3',available:true},
-            {Id:7, name: "The Hound of the Baskervilles", author:"Arthur Conan Doyle", publishingHouse:'pb h #1', yearOfPublishing: new Date(2010,1,1), owner:'user4',available:true},
-            {Id:8, name: "The Maltese Falcon", author:"Dashiell Hammett", publishingHouse:'pb h #1', yearOfPublishing: new Date(2010,1,1), owner:'user4',available:true},
-            {Id:9, name: "The Big Sleep", author:"Raymond Chandler", publishingHouse:'pb h #1', yearOfPublishing: new Date(2010,1,1), owner:'user5',available:true},
-            {Id:10, name: "The Name of the Rose", author:"Umberto Eco", publishingHouse:'pb h #1', yearOfPublishing: new Date(2010,1,1), owner:'user5',available:true}
+            {id:1, name: "The Lord of the Rings", author:"Tolkien", publishingHouse:'pb h #1', yearOfPublishing: new Date(2010,1,1), owner:'user1',available:true},
+            {id:2, name: "A Song of Ice and Fire", author:"George Martin", publishingHouse:'pb h #1', yearOfPublishing: new Date(2010,1,1), owner:'user1',available:true},
+            {id:3, name: "Jonathan Strange & Mr Norrell", author:"Susanna Clarke", publishingHouse:'pb h #1', yearOfPublishing: new Date(2010,1,1), owner:'user2',available:true},
+            {id:4, name: "American Gods", author:"Neil Gaiman", publishingHouse:'pb h #1', yearOfPublishing: new Date(2010,1,1), owner:'user2',available:true},
+            {id:5, name: "Assassin’s Apprentice", author:"Robin Hobb", publishingHouse:'pb h #1', yearOfPublishing: new Date(2010,1,1), owner:'user3',available:true},
+            {id:6, name: "Murder on the Orient Express", author:"Agatha Christie", publishingHouse:'pb h #1', yearOfPublishing: new Date(2010,1,1), owner:'user3',available:true},
+            {id:7, name: "The Hound of the Baskervilles", author:"Arthur Conan Doyle", publishingHouse:'pb h #1', yearOfPublishing: new Date(2010,1,1), owner:'user4',available:true},
+            {id:8, name: "The Maltese Falcon", author:"Dashiell Hammett", publishingHouse:'pb h #1', yearOfPublishing: new Date(2010,1,1), owner:'user4',available:true},
+            {id:9, name: "The Big Sleep", author:"Raymond Chandler", publishingHouse:'pb h #1', yearOfPublishing: new Date(2010,1,1), owner:'user5',available:true},
+            {id:10, name: "The Name of the Rose", author:"Umberto Eco", publishingHouse:'pb h #1', yearOfPublishing: new Date(2010,1,1), owner:'user5',available:true}
         ];
    
         localStorage.setItem(this.mocksKeys.BOOKS, JSON.stringify(books));

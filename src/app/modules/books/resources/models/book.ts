@@ -1,9 +1,9 @@
 export interface Book {
-    Id:number;
+    id:number;
     name: string;
     author: string;
     publishingHouse:string;
-    yearOfPublishing:Date;
+    yearOfPublishing:Date | null;
     owner:string;
     available:boolean;
     reservedBy?:string;
