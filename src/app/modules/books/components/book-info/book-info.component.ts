@@ -83,8 +83,17 @@ const bookInfoComponent = {
                   </div>
                   
                   <div class="col-9">
-                    <input type="input" class="form-control col-9 d-block" id="name" ng-model="$ctrl.book.name">
+                    <input type="input" class="form-control col-9" id="name" name="name" ng-model="$ctrl.book.name" required
+                      ng-class="{
+                        'is-invalid':$ctrl.bookForm.name.$error.required && !$ctrl.bookForm.name.$pristine,
+                        'is-valid':!$ctrl.bookForm.name.$error.required && !$ctrl.bookForm.name.$pristine
+                      }"
+                    >
+                      <div class="d-flex justify-content-end">
+                        <span ng-show="$ctrl.bookForm.name.$error.required && !$ctrl.bookForm.name.$pristine" class="text-danger">required</span>
+                      </div>
                   </div>
+
                 </div>
 
                 <div class="mb-3 row" >
@@ -92,7 +101,15 @@ const bookInfoComponent = {
                     <label for="author" class="form-label">Author</label>
                   </div>
                   <div class="col-9">
-                    <input type="input" class="form-control" id="author" ng-model="$ctrl.book.author">
+                    <input type="input" class="form-control" id="author" name="author" ng-model="$ctrl.book.author" required
+                      ng-class="{
+                        'is-invalid':$ctrl.bookForm.author.$error.required && !$ctrl.bookForm.author.$pristine,
+                        'is-valid':!$ctrl.bookForm.author.$error.required && !$ctrl.bookForm.author.$pristine
+                      }"
+                    >
+                    <div class="d-flex justify-content-end">
+                      <span ng-show="$ctrl.bookForm.author.$error.required && !$ctrl.bookForm.author.$pristine" class="text-danger">required</span>
+                    </div>
                   </div>
                 </div>
 
@@ -105,7 +122,15 @@ const bookInfoComponent = {
                     <label for="publishingHouse" class="form-label">Publishing house</label>
                   </div>
                   <div class="col-8">
-                    <input type="input" class="form-control" id="publishingHouse" ng-model="$ctrl.book.publishingHouse">
+                    <input type="input" class="form-control" id="publishingHouse" name="publishingHouse" ng-model="$ctrl.book.publishingHouse" required
+                    ng-class="{
+                      'is-invalid':$ctrl.bookForm.publishingHouse.$error.required && !$ctrl.bookForm.publishingHouse.$pristine,
+                      'is-valid':!$ctrl.bookForm.publishingHouse.$error.required && !$ctrl.bookForm.publishingHouse.$pristine
+                    }"
+                    >
+                    <div class="d-flex justify-content-end">
+                      <span ng-show="$ctrl.bookForm.publishingHouse.$error.required && !$ctrl.bookForm.publishingHouse.$pristine" class="text-danger">required</span>
+                    </div>
                   </div>
                 </div>
 
@@ -114,10 +139,12 @@ const bookInfoComponent = {
                     <label for="yearOfPublishing" class="form-label">Year of publishing</label>
                   </div>
                   <div class="col-8">
-                    <input type="number" id="yearOfPublishing" name="yearOfPublishing"
-                      ng-class="{'is-invalid':$ctrl.bookForm.yearOfPublishing.$error.yearOfPublishing,'is-valid':!$ctrl.bookForm.yearOfPublishing.$error.yearOfPublishing && !$ctrl.bookForm.yearOfPublishing.$pristine}" 
+                    <input type="number" id="yearOfPublishing" name="yearOfPublishing" ng-model="$ctrl.book.yearOfPublishing" 
+                      ng-class="{
+                        'is-invalid':$ctrl.bookForm.yearOfPublishing.$error.yearOfPublishing,
+                        'is-valid':!$ctrl.bookForm.yearOfPublishing.$error.yearOfPublishing && !$ctrl.bookForm.yearOfPublishing.$pristine
+                      }" 
                       class="form-control"  
-                      ng-model="$ctrl.book.yearOfPublishing" 
                       year-of-publishing>
                       <div class="d-flex justify-content-end">
                         <span ng-show="$ctrl.bookForm.yearOfPublishing.$error.yearOfPublishing" class="text-danger">The year must be greater than 1900 and less than the current year</span>
