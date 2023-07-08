@@ -4,7 +4,6 @@ import { Book } from "../models/book";
 
 export const getBooks = createAction(
   '[Books component] Get books',
-  //props<{authRequest:AuthRequest}>()
 );
 
 export const getBooksSuccess = createAction(

@@ -6,3 +6,4 @@ import "./shell/shell.state";
 import "./shell/shell.component";
 import "../modules/auth";
 import "../shared/shared.module";
+import "./directives/flex";

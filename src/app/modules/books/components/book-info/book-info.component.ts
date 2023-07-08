@@ -3,10 +3,11 @@ import { booksModule } from '../../books.module';
 import { Store } from '@ngrx/store';
 import { StateService } from '@uirouter/core';
 import { Book } from '../../resources/models/book';
-import { Observable, catchError, take } from 'rxjs';
+import { Observable, take } from 'rxjs';
 import { User } from '../../../auth/resources/models/user';
 import * as AuthSelectors from '../../../auth/resources/store/auth.selectors';
 import * as BookActions from '../../resources/store/books.actions';
+import * as BooksSelectors from '../../resources/store/books.selectors';
 import { BooksServiceInterface } from '../../resources/services/books.service';
 import { ApiResponce } from '../../../../shared/models/apiResponce';
 
@@ -16,18 +17,9 @@ class BookInfoController {
     store:Store;
     $state:StateService;
     user$:Observable<User>;
+    currentBook$:Observable<Book>;
     booksService:BooksServiceInterface;
     book:Book | null = null; 
-/*     {
-      id:0,
-      name:'',
-      author:'',
-      publishingHouse:'',
-      yearOfPublishing:null,
-      available:false,
-      owner:'',
-      reservedBy:''
-    }; */
 
     constructor( store, $state, booksService) {
       this.store = store;
@@ -37,6 +29,7 @@ class BookInfoController {
 
     $onInit = function() { 
       this.user$ = this.store.select(AuthSelectors.selectUser);
+      this.currentBook$ = this.store.select(BooksSelectors.selectCurrentBook);
     }; 
 
     saveBookChanges(){
@@ -128,7 +121,9 @@ const bookInfoComponent = {
 
               <div class="d-flex justify-content-end align-items-center">
                 
-                <div class="btn-group" ng-if="($ctrl.user$ | async:this).name === $ctrl.book.owner">
+                <div 
+                  ng-if="($ctrl.user$ | async:this).name === $ctrl.book.owner"
+                  class="btn-group">
 
                   <button 
                     type="button" class="btn btn-sm btn-outline-secondary" ng-click="$ctrl.clearBook()">
@@ -142,11 +137,11 @@ const bookInfoComponent = {
 
                 </div>
 
-                <div class="btn-group" ng-if="!($ctrl.book).id">
+                <div class="btn-group" ng-if="!($ctrl.currentBook$ | async:this)">
 
                   <button 
                     type="button" class="btn btn-sm btn-outline-secondary" ng-click="$ctrl.addBook()">
-                    Add
+                    Add new book
                   </button>
 
                 </div>

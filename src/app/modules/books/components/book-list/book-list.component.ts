@@ -17,6 +17,7 @@ class BookListController {
     booksService:BooksServiceInterface;
     books$:Observable<Book[]>;
     user$:Observable<User>;
+    isLoggenIn$:Observable<boolean>;
     currentBook$:Observable<Book>;
 
 
@@ -30,6 +31,7 @@ class BookListController {
       this.getBooks().subscribe();
       this.books$ = this.store.select(BooksSelectors.selectBooks);
       this.user$ = this.store.select(AuthSelectors.selectUser);
+      this.isLoggenIn$ = this.store.select(AuthSelectors.selectIsLoggedIn);
       this.currentBook$ = this.store.select(BooksSelectors.selectCurrentBook);
     };
 
@@ -63,7 +65,8 @@ const bookListComponent = {
     `
     <div class="album py-5 flex-fill">
       <div class="container">
-        <div class="col">
+        <div ng-if="$ctrl.isLoggenIn$ | async:this"
+          class="col">
           <book-info book="($ctrl.currentBook$ | async:this)"></book-info>
         </div>
         <div class="row row-cols-1 row-cols-sm-1 row-cols-md-2 row-cols-lg-2 row-cols-xl-3 row-cols-xl-4 g-3">
