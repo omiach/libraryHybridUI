@@ -119,8 +119,11 @@ const bookInfoComponent = {
                       class="form-control"  
                       ng-model="$ctrl.book.yearOfPublishing" 
                       year-of-publishing>
+                      <div class="d-flex justify-content-end">
+                        <span ng-show="$ctrl.bookForm.yearOfPublishing.$error.yearOfPublishing" class="text-danger">The year must be greater than 1900 and less than the current year</span>
+                      </div>
                   </div>
-                  <span ng-show="$ctrl.bookForm.yearOfPublishing.$error.yearOfPublishing">TEST !</span>
+                  
                 </div>
 
               </div>
