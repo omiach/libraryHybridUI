@@ -44,6 +44,7 @@ const bookCardComponent = {
       -->  
         <div class="card-body">
           <p class="card-text">{{$ctrl.book.name}}</p>
+          <p class="card-text">{{$ctrl.book.author}}</p>
           <div class="d-flex justify-content-between align-items-center">
             
             <div class="btn-group">

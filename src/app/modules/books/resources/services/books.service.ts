@@ -130,16 +130,16 @@ export class BooksService implements BooksServiceInterface  {
     generateMockBooks(){
 
         const books:Book[] = [
-            {id:1, name: "The Lord of the Rings", author:"Tolkien", publishingHouse:'pb h #1', yearOfPublishing: new Date(2010,1,1), owner:'user1',available:true},
-            {id:2, name: "A Song of Ice and Fire", author:"George Martin", publishingHouse:'pb h #1', yearOfPublishing: new Date(2010,1,1), owner:'user1',available:true},
-            {id:3, name: "Jonathan Strange & Mr Norrell", author:"Susanna Clarke", publishingHouse:'pb h #1', yearOfPublishing: new Date(2010,1,1), owner:'user2',available:true},
-            {id:4, name: "American Gods", author:"Neil Gaiman", publishingHouse:'pb h #1', yearOfPublishing: new Date(2010,1,1), owner:'user2',available:true},
-            {id:5, name: "Assassin’s Apprentice", author:"Robin Hobb", publishingHouse:'pb h #1', yearOfPublishing: new Date(2010,1,1), owner:'user3',available:true},
-            {id:6, name: "Murder on the Orient Express", author:"Agatha Christie", publishingHouse:'pb h #1', yearOfPublishing: new Date(2010,1,1), owner:'user3',available:true},
-            {id:7, name: "The Hound of the Baskervilles", author:"Arthur Conan Doyle", publishingHouse:'pb h #1', yearOfPublishing: new Date(2010,1,1), owner:'user4',available:true},
-            {id:8, name: "The Maltese Falcon", author:"Dashiell Hammett", publishingHouse:'pb h #1', yearOfPublishing: new Date(2010,1,1), owner:'user4',available:true},
-            {id:9, name: "The Big Sleep", author:"Raymond Chandler", publishingHouse:'pb h #1', yearOfPublishing: new Date(2010,1,1), owner:'user5',available:true},
-            {id:10, name: "The Name of the Rose", author:"Umberto Eco", publishingHouse:'pb h #1', yearOfPublishing: new Date(2010,1,1), owner:'user5',available:true}
+            {id:1, name: "The Lord of the Rings", author:"Tolkien", publishingHouse:'pb h #1', yearOfPublishing: 2010, owner:'user1',available:true},
+            {id:2, name: "A Song of Ice and Fire", author:"George Martin", publishingHouse:'pb h #1', yearOfPublishing: 2010, owner:'user1',available:true},
+            {id:3, name: "Jonathan Strange & Mr Norrell", author:"Susanna Clarke", publishingHouse:'pb h #1', yearOfPublishing: 2011, owner:'user2',available:true},
+            {id:4, name: "American Gods", author:"Neil Gaiman", publishingHouse:'pb h #1', yearOfPublishing: 2011, owner:'user2',available:true},
+            {id:5, name: "Assassin’s Apprentice", author:"Robin Hobb", publishingHouse:'pb h #1', yearOfPublishing: 2012, owner:'user3',available:true},
+            {id:6, name: "Murder on the Orient Express", author:"Agatha Christie", publishingHouse:'pb h #1', yearOfPublishing: 2012, owner:'user3',available:true},
+            {id:7, name: "The Hound of the Baskervilles", author:"Arthur Conan Doyle", publishingHouse:'pb h #1', yearOfPublishing: 2013, owner:'user4',available:true},
+            {id:8, name: "The Maltese Falcon", author:"Dashiell Hammett", publishingHouse:'pb h #1', yearOfPublishing: 2013, owner:'user4',available:true},
+            {id:9, name: "The Big Sleep", author:"Raymond Chandler", publishingHouse:'pb h #1', yearOfPublishing: 2014, owner:'user5',available:true},
+            {id:10, name: "The Name of the Rose", author:"Umberto Eco", publishingHouse:'pb h #1', yearOfPublishing: 2014, owner:'user5',available:true}
         ];
    
         localStorage.setItem(this.mocksKeys.BOOKS, JSON.stringify(books));

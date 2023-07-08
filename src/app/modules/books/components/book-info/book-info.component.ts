@@ -20,6 +20,7 @@ class BookInfoController {
     currentBook$:Observable<Book>;
     booksService:BooksServiceInterface;
     book:Book | null = null; 
+    bookForm;
 
     constructor( store, $state, booksService) {
       this.store = store;
@@ -67,8 +68,8 @@ const bookInfoComponent = {
     `
     <div class="col mb-4">
       <div class="card shadow-sm">
-        <form>
-          <div class="card-body row">
+        
+          <div class="card-body row" ng-form="$ctrl.bookForm">
             
               <div class="col">
               
@@ -113,8 +114,13 @@ const bookInfoComponent = {
                     <label for="yearOfPublishing" class="form-label">Year of publishing</label>
                   </div>
                   <div class="col-8">
-                    <input type="input" class="form-control" id="yearOfPublishing" ng-model="$ctrl.book.yearOfPublishing">
+                    <input type="number" id="yearOfPublishing" name="yearOfPublishing"
+                      ng-class="{'is-invalid':$ctrl.bookForm.yearOfPublishing.$error.yearOfPublishing,'is-valid':!$ctrl.bookForm.yearOfPublishing.$error.yearOfPublishing && !$ctrl.bookForm.yearOfPublishing.$pristine}" 
+                      class="form-control"  
+                      ng-model="$ctrl.book.yearOfPublishing" 
+                      year-of-publishing>
                   </div>
+                  <span ng-show="$ctrl.bookForm.yearOfPublishing.$error.yearOfPublishing">TEST !</span>
                 </div>
 
               </div>
@@ -126,12 +132,12 @@ const bookInfoComponent = {
                   class="btn-group">
 
                   <button 
-                    type="button" class="btn btn-sm btn-outline-secondary" ng-click="$ctrl.clearBook()">
+                    type="button" class="btn btn-outline-secondary" ng-click="$ctrl.clearBook()">
                     Clear
                   </button>
 
                   <button 
-                    type="button" class="btn btn-sm btn-outline-secondary" ng-click="$ctrl.saveBookChanges()">
+                    type="submit" class="btn btn-outline-secondary" ng-click="$ctrl.saveBookChanges()">
                     Save
                   </button>
 
@@ -140,7 +146,7 @@ const bookInfoComponent = {
                 <div class="btn-group" ng-if="!($ctrl.currentBook$ | async:this)">
 
                   <button 
-                    type="button" class="btn btn-sm btn-outline-secondary" ng-click="$ctrl.addBook()">
+                    type="submit" class="btn btn-outline-secondary" ng-click="$ctrl.addBook()">
                     Add new book
                   </button>
 
@@ -149,7 +155,12 @@ const bookInfoComponent = {
               </div>
 
           </div>
-        <form>
+
+
+        
+
+
+
       </div>
     </div>
     `

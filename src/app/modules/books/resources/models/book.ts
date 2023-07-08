@@ -3,7 +3,7 @@ export interface Book {
     name: string;
     author: string;
     publishingHouse:string;
-    yearOfPublishing:Date | null;
+    yearOfPublishing:number;
     owner:string;
     available:boolean;
     reservedBy?:string;
