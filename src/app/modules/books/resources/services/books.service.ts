@@ -1,4 +1,4 @@
- import { Observable, catchError, concatMap, of, switchMap, take } from "rxjs";
+ import { Observable, catchError, concatMap, firstValueFrom, of, switchMap, take } from "rxjs";
 import { Store } from "@ngrx/store";
 import { Book } from "../models/book";
 import { MocksKeys } from "../../../../shared/constants/constants";
@@ -30,10 +30,21 @@ export class BooksService implements BooksServiceInterface  {
             return of({...responce, errors:['connection error']});
         }
 
-        book.id = books.length + 1;
+        return this.store.select(AuthSelectors.selectUser).pipe(
+            take(1),
+            switchMap(user => {
+                book.owner = user.name
+                book.id = books.length + 1;
+                book.available = true;  
+                books.push(book);
+                localStorage.setItem(this.mocksKeys.BOOKS, JSON.stringify(books));
+                return of({...responce, success:true});
+            }),
+            catchError(error => {
+                return of({...responce, errors:['connection error']})
+            })
+        )
         
-        localStorage.setItem(this.mocksKeys.BOOKS, JSON.stringify(books.push(book)));
-        return of({...responce, success:true});
     }
 
     editBook(book:Book):Observable<ApiResponce<null>>{
