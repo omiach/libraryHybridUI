@@ -3,22 +3,26 @@ import { booksModule } from '../../books.module';
 import { Store } from '@ngrx/store';
 import { StateService } from '@uirouter/core';
 import { Book } from '../../resources/models/book';
-import { Observable } from 'rxjs';
+import { Observable, catchError, of, switchMap, take } from 'rxjs';
 import { User } from '../../../auth/resources/models/user';
 import * as AuthSelectors from '../../../auth/resources/store/auth.selectors';
-import * as BookActions from '../../resources/store/books.actions';
+import * as BooksActions from '../../resources/store/books.actions';
+import { BooksServiceInterface } from '../../resources/services/books.service';
+import { ApiResponce } from '../../../../shared/models/apiResponce';
 
 
 class BookCardController {
-    static $inject = ['store','$state'];
+    static $inject = ['store','$state','booksService'];
     store:Store;
     $state:StateService;
     book:Book;
     user$:Observable<User>;
+    booksService:BooksServiceInterface;
 
-    constructor( store, $state) {
+    constructor( store, $state, booksService) {
       this.store = store;
       this.$state = $state;
+      this.booksService = booksService;
     }
 
     $onInit = function() { 
@@ -26,7 +30,53 @@ class BookCardController {
     }; 
 
     editBook(){
-      this.store.dispatch(BookActions.setCurrentBook({book:{...this.book}}));
+      this.store.dispatch(BooksActions.setCurrentBook({book:{...this.book}}));
+    }
+
+    reserveBook(){
+      this.handleReserve(this.booksService.reserveBook(this.book.id));
+    }
+
+    returnBook(){
+      this.handleReserve(this.booksService.reserveBook(this.book.id, false));
+    }
+   
+    getBooks():Observable<null>{ 
+
+      return this.booksService.getBooks().pipe(
+        take(1),
+        switchMap((responce) => {
+          if(responce.success){
+            this.store.dispatch(BooksActions.getBooksSuccess({books: responce.data}));
+          }
+          else{
+            this.store.dispatch(BooksActions.getBooksFailure({error: responce.errors}));
+            alert('ERROR - ' + responce.errors.toString()); 
+          }
+          return of();
+        }),
+        catchError(error => {
+          this.store.dispatch(BooksActions.getBooksFailure({error: error?.error?.errors}));     
+          alert('ERROR - ' + error?.error?.errors.toString()); 
+          return of();
+        })
+      );
+    }
+
+    handleReserve(request:Observable<ApiResponce<null>>){
+      request.pipe(take(1)).subscribe({
+        next: (responce) => {
+          if(!responce.success){
+            alert('ERROR - ' + responce.errors.toString());
+            return;
+          }
+          this.store.dispatch(BooksActions.clearCurrentBook());
+          this.getBooks().subscribe();
+        },
+        error: (error) => {
+          alert('ERROR - ' + error?.error?.errors.toString()); 
+        }
+      });
     }
 }
 
@@ -53,12 +103,14 @@ const bookCardComponent = {
 
               <button 
                 ng-if="($ctrl.user$ | async:this) && $ctrl.book.available"
+                ng-click="$ctrl.reserveBook()"
                 type="button" class="btn btn-sm btn-outline-secondary">
-                  Reserv
+                  Reserve
               </button>
 
               <button 
                 ng-if="($ctrl.user$ | async:this) && ($ctrl.user$ | async:this).name === $ctrl.book.reservedBy"
+                ng-click="$ctrl.returnBook()"
                 type="button" class="btn btn-sm btn-outline-secondary">
                   Return
               </button>

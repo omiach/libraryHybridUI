@@ -34,12 +34,12 @@ class BookInfoController {
     }; 
 
     saveBookChanges(){
-      this.handleApiRequest(this.booksService.editBook(this.book));
+      this.handleAddOrEdditRequest(this.booksService.editBook(this.book));
       this.clearBook();
     }
 
     addBook(){
-      this.handleApiRequest(this.booksService.addBook(this.book));
+      this.handleAddOrEdditRequest(this.booksService.addBook(this.book));
       this.clearBook();
     }
 
@@ -65,7 +65,7 @@ class BookInfoController {
       );
     }
 
-    handleApiRequest(request:Observable<ApiResponce<null>>){
+    handleAddOrEdditRequest(request:Observable<ApiResponce<null>>){
       request.pipe(take(1)).subscribe({
         next: (responce) => {
           if(!responce.success){
@@ -73,12 +73,12 @@ class BookInfoController {
             return;
           }
           this.store.dispatch(BooksActions.clearCurrentBook());
+          this.getBooks().subscribe();
         },
         error: (error) => {
           alert('ERROR - ' + error?.error?.errors.toString()); 
         }
       });
-      this.getBooks().subscribe();
     }
 
     clearBook(){
@@ -224,11 +224,6 @@ const bookInfoComponent = {
               </div>
 
           </div>
-
-
-        
-
-
 
       </div>
     </div>

@@ -122,8 +122,9 @@ export class BooksService implements BooksServiceInterface  {
         return this.store.select(AuthSelectors.selectUser).pipe(
             take(1),
             concatMap((user) => {
+                console.log(books);
                 const bookindex = books.findIndex(x => x.id === bookId);
-                if(!bookindex){
+                if(bookindex === -1){
                     return of({...responce, errors:['book not found']});                            
                 }
                 books[bookindex].available = !reserve;

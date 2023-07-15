@@ -48,5 +48,4 @@ export const reducer = createReducer(
         currentBook:null,
       };
     }),
-
 );
