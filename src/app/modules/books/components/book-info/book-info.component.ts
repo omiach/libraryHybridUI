@@ -3,10 +3,10 @@ import { booksModule } from '../../books.module';
 import { Store } from '@ngrx/store';
 import { StateService } from '@uirouter/core';
 import { Book } from '../../resources/models/book';
-import { Observable, take } from 'rxjs';
+import { Observable, catchError, of, switchMap, take } from 'rxjs';
 import { User } from '../../../auth/resources/models/user';
 import * as AuthSelectors from '../../../auth/resources/store/auth.selectors';
-import * as BookActions from '../../resources/store/books.actions';
+import * as BooksActions from '../../resources/store/books.actions';
 import * as BooksSelectors from '../../resources/store/books.selectors';
 import { BooksServiceInterface } from '../../resources/services/books.service';
 import { ApiResponce } from '../../../../shared/models/apiResponce';
@@ -34,28 +34,61 @@ class BookInfoController {
     }; 
 
     saveBookChanges(){
-      this.handleSimpleResquest(this.booksService.editBook(this.book));
+      this.handleApiRequest(this.booksService.editBook(this.book));
+      this.clearForm();
     }
 
     addBook(){
-      this.handleSimpleResquest(this.booksService.addBook(this.book));
+      this.handleApiRequest(this.booksService.addBook(this.book));
+      this.clearForm();
     }
 
-    handleSimpleResquest(request:Observable<ApiResponce<null>>){
+    getBooks():Observable<null>{ 
+
+      return this.booksService.getBooks().pipe(
+        take(1),
+        switchMap((responce) => {
+          if(responce.success){
+            this.store.dispatch(BooksActions.getBooksSuccess({books: responce.data}));
+          }
+          else{
+            this.store.dispatch(BooksActions.getBooksFailure({error: responce.errors}));
+            alert('ERROR - ' + responce.errors.toString()); 
+          }
+          return of();
+        }),
+        catchError(error => {
+          this.store.dispatch(BooksActions.getBooksFailure({error: error?.error?.errors}));     
+          alert('ERROR - ' + error?.error?.errors.toString()); 
+          return of();
+        })
+      );
+    }
+
+    handleApiRequest(request:Observable<ApiResponce<null>>){
       request.pipe(take(1)).subscribe({
         next: (responce) => {
           if(!responce.success){
             alert('ERROR - ' + responce.errors.toString());
+            return;
           }
+          this.store.dispatch(BooksActions.clearCurrentBook());
         },
         error: (error) => {
           alert('ERROR - ' + error?.error?.errors.toString()); 
         }
       });
+      this.getBooks().subscribe();
     }
 
     clearBook(){
-      this.store.dispatch(BookActions.clearCurrentBook());
+      this.store.dispatch(BooksActions.clearCurrentBook());
+      this.clearForm();
+    }
+
+    clearForm(){
+      this.bookForm.$setPristine(true);
+      this.bookForm.$setUntouched(true);
     }
 }
 
@@ -141,13 +174,13 @@ const bookInfoComponent = {
                   <div class="col-8">
                     <input type="number" id="yearOfPublishing" name="yearOfPublishing" ng-model="$ctrl.book.yearOfPublishing" 
                       ng-class="{
-                        'is-invalid':$ctrl.bookForm.yearOfPublishing.$error.yearOfPublishing,
+                        'is-invalid':$ctrl.bookForm.yearOfPublishing.$error.yearOfPublishing && !$ctrl.bookForm.yearOfPublishing.$pristine,
                         'is-valid':!$ctrl.bookForm.yearOfPublishing.$error.yearOfPublishing && !$ctrl.bookForm.yearOfPublishing.$pristine
                       }" 
                       class="form-control"  
                       year-of-publishing>
                       <div class="d-flex justify-content-end">
-                        <span ng-show="$ctrl.bookForm.yearOfPublishing.$error.yearOfPublishing" class="text-danger">The year must be greater than 1900 and less than the current year</span>
+                        <span ng-show="$ctrl.bookForm.yearOfPublishing.$error.yearOfPublishing && !$ctrl.bookForm.yearOfPublishing.$pristine" class="text-danger">The year must be greater than 1900 and less than the current year</span>
                       </div>
                   </div>
                   
@@ -163,10 +196,10 @@ const bookInfoComponent = {
 
                   <button 
                     type="button" class="btn btn-outline-secondary" ng-click="$ctrl.clearBook()">
-                    Clear
+                    Cancel
                   </button>
 
-                  <button 
+                  <button ng-disabled="$ctrl.bookForm.$invalid"
                     type="submit" class="btn btn-outline-secondary" ng-click="$ctrl.saveBookChanges()">
                     Save
                   </button>
@@ -175,7 +208,7 @@ const bookInfoComponent = {
 
                 <div class="btn-group" ng-if="!($ctrl.currentBook$ | async:this)">
 
-                  <button 
+                  <button ng-disabled="$ctrl.bookForm.$invalid"
                     type="submit" class="btn btn-outline-secondary" ng-click="$ctrl.addBook()">
                     Add new book
                   </button>

@@ -26,7 +26,7 @@ class BookCardController {
     }; 
 
     editBook(){
-      this.store.dispatch(BookActions.setCurrentBook({book:this.book}));
+      this.store.dispatch(BookActions.setCurrentBook({book:{...this.book}}));
     }
 }
 
