@@ -119,8 +119,8 @@ const bookInfoComponent = {
                   <div class="col-9">
                     <input type="input" class="form-control col-9" id="name" name="name" ng-model="$ctrl.book.name" required
                       ng-class="{
-                        'is-invalid':$ctrl.bookForm.name.$error.required && !$ctrl.bookForm.name.$pristine,
-                        'is-valid':!$ctrl.bookForm.name.$error.required && !$ctrl.bookForm.name.$pristine
+                        'is-invalid':$ctrl.bookForm.name.$invalid && !$ctrl.bookForm.name.$pristine,
+                        'is-valid':$ctrl.bookForm.name.$valid && !$ctrl.bookForm.name.$pristine
                       }"
                     >
                       <div class="d-flex justify-content-end">
@@ -137,8 +137,8 @@ const bookInfoComponent = {
                   <div class="col-9">
                     <input type="input" class="form-control" id="author" name="author" ng-model="$ctrl.book.author" required
                       ng-class="{
-                        'is-invalid':$ctrl.bookForm.author.$error.required && !$ctrl.bookForm.author.$pristine,
-                        'is-valid':!$ctrl.bookForm.author.$error.required && !$ctrl.bookForm.author.$pristine
+                        'is-invalid':$ctrl.bookForm.author.$invalid && !$ctrl.bookForm.author.$pristine,
+                        'is-valid':$ctrl.bookForm.author.$valid && !$ctrl.bookForm.author.$pristine
                       }"
                     >
                     <div class="d-flex justify-content-end">
@@ -158,8 +158,8 @@ const bookInfoComponent = {
                   <div class="col-8">
                     <input type="input" class="form-control" id="publishingHouse" name="publishingHouse" ng-model="$ctrl.book.publishingHouse" required
                     ng-class="{
-                      'is-invalid':$ctrl.bookForm.publishingHouse.$error.required && !$ctrl.bookForm.publishingHouse.$pristine,
-                      'is-valid':!$ctrl.bookForm.publishingHouse.$error.required && !$ctrl.bookForm.publishingHouse.$pristine
+                      'is-invalid':$ctrl.bookForm.publishingHouse.$invalid && !$ctrl.bookForm.publishingHouse.$pristine,
+                      'is-valid':$ctrl.bookForm.publishingHouse.$valid && !$ctrl.bookForm.publishingHouse.$pristine
                     }"
                     >
                     <div class="d-flex justify-content-end">
@@ -175,8 +175,8 @@ const bookInfoComponent = {
                   <div class="col-8">
                     <input type="number" id="yearOfPublishing" name="yearOfPublishing" ng-model="$ctrl.book.yearOfPublishing" required
                       ng-class="{
-                        'is-invalid':$ctrl.bookForm.yearOfPublishing.$error.yearOfPublishing && !$ctrl.bookForm.yearOfPublishing.$pristine,
-                        'is-valid':!$ctrl.bookForm.yearOfPublishing.$error.yearOfPublishing && !$ctrl.bookForm.yearOfPublishing.$pristine
+                        'is-invalid':$ctrl.bookForm.yearOfPublishing.$invalid && !$ctrl.bookForm.yearOfPublishing.$pristine,
+                        'is-valid':$ctrl.bookForm.yearOfPublishing.$valid && !$ctrl.bookForm.yearOfPublishing.$pristine
                       }" 
                       class="form-control"  
                       year-of-publishing>
