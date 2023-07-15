@@ -60,7 +60,7 @@ const shellComponent = {
     `<div class="flex-fill d-flex flex-column bg-light overflow-hidden"> 
       <nav class="navbar navbar-expand-lg navbar-dark bg-dark" aria-label="Fifth navbar example">
         <div class="container-fluid">
-          <a class="navbar-brand" ui-sref="shell">Library</a>
+          <a class="navbar-brand" ui-sref="books">Library</a>
           <button class="navbar-toggler collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#navbarsExample05" aria-controls="navbarsExample05" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
           </button>
@@ -69,9 +69,9 @@ const shellComponent = {
 
           <div class="navbar-collapse collapse" id="navbarsExample05" style="">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-              <li class="nav-item">
+              <!--<li class="nav-item">
                 <a class="nav-link active" aria-current="page" ui-sref="books">Books</a>
-              </li>
+              </li>-->
             </ul>
 
             <div

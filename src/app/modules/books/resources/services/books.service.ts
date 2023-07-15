@@ -83,25 +83,8 @@ export class BooksService implements BooksServiceInterface  {
             return of({...responce, errors:['connection error']});
         }
 
-/*         let reserves = JSON.parse(localStorage.getItem(this.mocksKeys.BOOKS_RESERVES)) as Reserve[];  
-        if (reserves){
-            this.joinReservesToBooks(books,reserves);
-        }      */
-
-
         return of({...responce, success:true, data:books});
     }
-
-/*     joinReservesToBooks(books:Book[],reserves:Reserve[]){
-        for (const reserve of reserves) {
-            const bookIndex = books.findIndex(x => x.id === reserve.bookid);
-            if(!bookIndex){
-                continue;
-            }
-
-            books[bookIndex].available = false;
-        }
-    } */
 
     reserveBook(bookId:number, reserve?:boolean):Observable<ApiResponce<null>>{
         
@@ -127,6 +110,15 @@ export class BooksService implements BooksServiceInterface  {
                 if(bookindex === -1){
                     return of({...responce, errors:['book not found']});                            
                 }
+
+                if (books[bookindex].available && !reserve){
+                    return of({...responce, errors:['you cannot return a book that is available']});
+                }
+
+                if (!books[bookindex].available && reserve){
+                    return of({...responce, errors:['the book has already been reserved by someone else']});
+                }
+
                 books[bookindex].available = !reserve;
                 books[bookindex].reservedBy = reserve ? user.name : null;
                 localStorage.setItem(this.mocksKeys.BOOKS, JSON.stringify(books));

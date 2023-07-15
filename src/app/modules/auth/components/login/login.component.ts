@@ -40,7 +40,7 @@ class LoginController {
             return this.authService.getCurrentUserInfo().pipe(
               switchMap((user) => {
                 this.store.dispatch(authActions.getCurrentUserInfoSuccess({user:user}));
-                this.$state.go('shell');
+                this.$state.go('books');
                 return of();
               }),
               catchError((error) => {

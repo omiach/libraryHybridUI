@@ -3,7 +3,7 @@ import { mainModule } from "../main.module";
 const mainState = {
     parent: 'app',
     name: 'shell',
-    url:"/",
+    //url:"/",
     component: 'shell',
 /*     data: {
       requiresAuth:true
