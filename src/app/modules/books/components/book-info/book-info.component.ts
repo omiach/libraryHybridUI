@@ -35,12 +35,12 @@ class BookInfoController {
 
     saveBookChanges(){
       this.handleApiRequest(this.booksService.editBook(this.book));
-      this.clearForm();
+      this.clearBook();
     }
 
     addBook(){
       this.handleApiRequest(this.booksService.addBook(this.book));
-      this.clearForm();
+      this.clearBook();
     }
 
     getBooks():Observable<null>{ 
@@ -87,6 +87,7 @@ class BookInfoController {
     }
 
     clearForm(){
+      this.book = null;
       this.bookForm.$setPristine(true);
       this.bookForm.$setUntouched(true);
     }
@@ -172,7 +173,7 @@ const bookInfoComponent = {
                     <label for="yearOfPublishing" class="form-label">Year of publishing</label>
                   </div>
                   <div class="col-8">
-                    <input type="number" id="yearOfPublishing" name="yearOfPublishing" ng-model="$ctrl.book.yearOfPublishing" 
+                    <input type="number" id="yearOfPublishing" name="yearOfPublishing" ng-model="$ctrl.book.yearOfPublishing" required
                       ng-class="{
                         'is-invalid':$ctrl.bookForm.yearOfPublishing.$error.yearOfPublishing && !$ctrl.bookForm.yearOfPublishing.$pristine,
                         'is-valid':!$ctrl.bookForm.yearOfPublishing.$error.yearOfPublishing && !$ctrl.bookForm.yearOfPublishing.$pristine
@@ -207,6 +208,11 @@ const bookInfoComponent = {
                 </div>
 
                 <div class="btn-group" ng-if="!($ctrl.currentBook$ | async:this)">
+
+                  <button 
+                    type="button" class="btn btn-outline-secondary" ng-click="$ctrl.clearBook()">
+                    Clear
+                  </button>
 
                   <button ng-disabled="$ctrl.bookForm.$invalid"
                     type="submit" class="btn btn-outline-secondary" ng-click="$ctrl.addBook()">

@@ -63,14 +63,16 @@ const bookListComponent = {
     controller: BookListController,
     template:
     `
-    <div class="album py-5 flex-fill">
-      <div class="container">
+    <div class="album py-5 flex-fill d-flex align-items-stretch">
+      <div class="container d-flex flex-column h-100">
         <div ng-if="$ctrl.isLoggenIn$ | async:this"
           class="col">
           <book-info book="($ctrl.currentBook$ | async:this)"></book-info>
         </div>
-        <div class="row row-cols-1 row-cols-sm-1 row-cols-md-2 row-cols-lg-3 row-cols-xl-4 row-cols-xl-4 g-3">
-          <book-card ng-repeat="book in $ctrl.books$ | async:this track by $index" book="book"></book-card>
+        <div class="d-flex flex-column overflow-y-auto  overflow-x-hidden flex-fill pe-2" style="height : 400px">
+          <div class="row row-cols-1 row-cols-sm-1 row-cols-md-2 row-cols-lg-3 row-cols-xl-4 row-cols-xl-4 g-3 flex-fill">
+            <book-card ng-repeat="book in $ctrl.books$ | async:this track by $index" book="book"></book-card>
+          </div>
         </div>
       </div>
     </div>
