@@ -69,7 +69,7 @@ const bookListComponent = {
           class="col">
           <book-info book="($ctrl.currentBook$ | async:this)"></book-info>
         </div>
-        <div class="d-flex flex-column overflow-y-auto  overflow-x-hidden flex-fill pe-2" style="height : 400px">
+        <div class=" overflow-y-auto  overflow-x-hidden flex-fill pe-2" style="height : 400px">
           <div class="row row-cols-1 row-cols-sm-1 row-cols-md-2 row-cols-lg-3 row-cols-xl-4 row-cols-xl-4 g-3 flex-fill">
             <book-card ng-repeat="book in $ctrl.books$ | async:this track by $index" book="book"></book-card>
           </div>
